@@ -1,0 +1,466 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0B2559">
+<title>Viajes MDQ | Control de Equipaje</title>
+<style>
+:root{--navy:#0B2559;--blue:#00B2FE;--ink:#172033;--muted:#65718a;--bg:#f2f6fb;--card:#fff;--line:#dce5f0;--green:#168653;--red:#c93636;--amber:#a86700;--shadow:0 8px 24px rgba(11,37,89,.08)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;padding-bottom:35px}
+button,input,select,textarea{font:inherit}button{cursor:pointer;border:0;border-radius:12px;padding:12px 14px;font-weight:750}button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid #83d8ff;outline-offset:2px}
+.top{background:linear-gradient(135deg,var(--navy),#123b7c);color:#fff;padding:20px 16px 18px;border-radius:0 0 22px 22px;box-shadow:var(--shadow)}
+.topinner,.wrap{max-width:1080px;margin:auto}.brand{display:flex;align-items:center;gap:12px}.logo{width:48px;height:48px;display:grid;place-items:center;border-radius:15px;background:var(--blue);color:var(--navy);font-size:25px}.brand h1{font-size:20px;margin:0;line-height:1.15}.brand p{margin:4px 0 0;color:#c9e8ff;font-size:12px}.toprow{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:16px}.cloudstate{font-size:12px;background:#ffffff18;border:1px solid #ffffff38;border-radius:999px;padding:6px 10px}.wrap{padding:16px 12px}.stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:14px}.stat{background:var(--card);padding:14px;border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow)}.stat span{display:block;color:var(--muted);font-size:12px;font-weight:700}.stat strong{display:block;font-size:24px;color:var(--navy);margin-top:3px;overflow-wrap:anywhere}.stat .money{font-size:19px}.tabs{display:flex;gap:7px;overflow:auto;padding:3px 0 12px;margin-bottom:4px}.tab{white-space:nowrap;background:#e4edf8;color:var(--navy);padding:10px 13px}.tab.active{background:var(--navy);color:#fff}.panel{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:14px;box-shadow:var(--shadow)}.panel h2{font-size:17px;color:var(--navy);margin:0 0 13px}.sub{font-size:12px;color:var(--muted);margin:-7px 0 14px}.grid{display:grid;grid-template-columns:1fr;gap:10px}.field label{display:block;font-size:12px;font-weight:750;color:#43516b;margin:0 0 5px}.field input,.field select,.field textarea,.search{width:100%;border:1px solid #cbd7e6;border-radius:11px;background:#fff;color:var(--ink);padding:12px;min-height:45px}.field textarea{min-height:75px;resize:vertical}.field input:read-only{background:#f3f6fa;color:#526078}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}.primary{background:var(--navy);color:white}.sky{background:var(--blue);color:var(--navy)}.secondary{background:#e9eff7;color:var(--navy)}.danger{background:#ffebeb;color:var(--red)}.success{background:#e4f7ed;color:#087343}.small{font-size:12px;padding:8px 10px;border-radius:9px}.notice{border-radius:12px;padding:11px 12px;background:#fff7e6;color:#805100;font-size:12px;margin-bottom:12px}.oknotice{background:#e7f7ef;color:#12653f}.listhead{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}.listhead h2{margin:0}.searchrow{display:grid;grid-template-columns:1fr;gap:8px;margin-bottom:10px}.record{border:1px solid var(--line);border-radius:14px;padding:13px;margin-top:9px;background:#fff}.record.delivered{border-left:5px solid #1ca66b}.record.stored{border-left:5px solid #00a5e8}.record.overdue{border-left:5px solid #d18b14}.recordtop{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}.record h3{margin:0;color:var(--navy);font-size:15px;overflow-wrap:anywhere}.meta{font-size:12px;color:var(--muted);margin-top:3px;overflow-wrap:anywhere}.pill{font-size:11px;font-weight:800;padding:5px 8px;border-radius:999px;white-space:nowrap}.pill.stored{background:#e4f6ff;color:#006a99}.pill.delivered{background:#e2f7eb;color:#087343}.pill.pending{background:#fff2d6;color:#8b5a00}.recordgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.kv{background:#f5f8fc;border-radius:9px;padding:8px}.kv span{display:block;color:var(--muted);font-size:10px;text-transform:uppercase;font-weight:800}.kv b{display:block;font-size:13px;overflow-wrap:anywhere}.empty{text-align:center;color:var(--muted);padding:24px 8px}.hidden{display:none!important}.divider{height:1px;background:var(--line);margin:13px 0}.foot{color:var(--muted);font-size:11px;text-align:center;padding:15px}.tablewrap{overflow:auto}table{width:100%;border-collapse:collapse;font-size:12px}th,td{text-align:left;padding:9px;border-bottom:1px solid var(--line);white-space:nowrap}th{color:var(--navy);background:#f4f7fb}.modalback{position:fixed;inset:0;background:#061633a8;z-index:20;display:flex;align-items:flex-end;justify-content:center;padding:12px}.modal{background:white;border-radius:20px 20px 14px 14px;width:100%;max-width:620px;max-height:90vh;overflow:auto;padding:18px}.modal h2{margin-top:0;color:var(--navy)}.close{float:right;background:#e9eff7;color:var(--navy)}.tag{font-size:11px;color:#45617e;background:#eef5fc;border-radius:7px;padding:4px 7px;display:inline-block}
+@media(min-width:650px){.wrap{padding:22px 18px}.stats{grid-template-columns:repeat(4,minmax(0,1fr))}.grid.two{grid-template-columns:repeat(2,minmax(0,1fr))}.grid.three{grid-template-columns:repeat(3,minmax(0,1fr))}.searchrow{grid-template-columns:2fr 1fr 1fr}.modalback{align-items:center}.recordgrid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media print{.top,.tabs,.actions,.no-print,.foot{display:none!important}body{background:#fff;padding:0}.wrap{max-width:none;padding:0}.panel,.record{box-shadow:none;break-inside:avoid}.record{border:1px solid #aaa}.stats{grid-template-columns:repeat(4,1fr)}}
+</style>
+</head>
+<body>
+<header class="top">
+ <div class="topinner">
+  <div class="brand"><div class="logo">✈</div><div><h1>Viajes MDQ</h1><p>Control de equipaje · Terminal de Mar del Plata · Local 3B</p></div></div>
+  <div class="toprow"><span class="cloudstate" id="storageState">● Guardado en este dispositivo</span><button class="secondary small" onclick="openCloud()">☁ Configurar nube</button></div>
+ </div>
+</header>
+<main class="wrap">
+ <div class="stats">
+  <div class="stat"><span>Bultos registrados</span><strong id="statTotal">0</strong></div>
+  <div class="stat"><span>En depósito</span><strong id="statStored">0</strong></div>
+  <div class="stat"><span>Entregados</span><strong id="statDelivered">0</strong></div>
+  <div class="stat"><span>Total por cobrar</span><strong class="money" id="statPending">$ 0</strong></div>
+ </div>
+ <nav class="tabs no-print">
+  <button class="tab active" data-tab="receive" onclick="showTab('receive')">＋ Recepción</button>
+  <button class="tab" data-tab="inventory" onclick="showTab('inventory')">📦 Depósito e historial</button>
+  <button class="tab" data-tab="payments" onclick="showTab('payments')">💳 Caja y pagos</button>
+  <button class="tab" data-tab="reports" onclick="showTab('reports')">📊 Informes</button>
+ </nav>
+
+ <section id="tab-receive">
+  <div class="panel">
+   <h2 id="formTitle">Registrar recepción de equipaje</h2>
+   <p class="sub">Cargá una sola recepción por pasajero. Podés registrar hasta 46 bultos juntos: se crea un grupo único y un ticket correlativo individual por cada pieza.</p>
+   <div class="grid two">
+    <div class="field"><label for="kind">Tipo de bulto *</label><select id="kind"><option>Valija</option><option>Bolsa</option><option>Caja</option><option>Mochila</option><option>Otro</option></select></div>
+    <div class="field"><label for="qty">Cantidad de bultos *</label><input id="qty" type="number" min="1" max="46" value="1" inputmode="numeric" oninput="updatePriceTotal()"><small class="meta">Se generará un ticket individual imprimible para cada bulto.</small></div>
+    <div class="field"><label for="passenger">Nombre y apellido *</label><input id="passenger" autocomplete="name" placeholder="Nombre del pasajero"></div>
+    <div class="field"><label for="dni">DNI / documento</label><input id="dni" inputmode="numeric" autocomplete="off" placeholder="Número de documento"></div>
+    <div class="field"><label>Numeración de tickets</label><input value="Automática y correlativa" readonly><small class="meta">El sistema asigna un número distinto a cada bulto.</small></div>
+    <div class="field"><label>Código compartido del grupo</label><input value="Se genera automáticamente" readonly><small class="meta">Los bultos de una misma recepción comparten este código.</small></div>
+    <div class="field"><label for="receivedBy">Recibido por *</label><input id="receivedBy" placeholder="Nombre del empleado"></div>
+    <div class="field"><label for="unitPrice">Tarifa por bulto y por día ($ ARS) *</label><input id="unitPrice" type="number" min="0" step="0.01" inputmode="decimal" value="4000" placeholder="Ej. 4000" oninput="updatePriceTotal()"><small class="meta">Tarifa editable. Valor inicial sugerido: $ 4.000 por bulto por día.</small></div>
+    <div class="field"><label for="stayDays">Días de estadía a cobrar *</label><input id="stayDays" type="number" min="1" max="365" step="1" inputmode="numeric" value="1" oninput="updatePriceTotal()"><small class="meta">Un día: 1 × tarifa. Tres días: 3 × tarifa. Podés ajustarlo.</small></div>
+    <div class="field"><label for="packingPrice">Precio total de embalaje del grupo ($ ARS)</label><input id="packingPrice" type="number" min="0" step="0.01" inputmode="decimal" value="0" oninput="updatePriceTotal()"><small class="meta">Si no lleva embalaje, dejá $ 0.</small></div>
+    <div class="field"><label for="pickupAt">Fecha y hora prevista de retiro</label><input id="pickupAt" type="datetime-local" onchange="syncStayDaysFromPickup()"><small class="meta">La fecha y hora de ingreso se registran automáticamente al guardar.</small></div>
+    <div class="field"><label for="price">Total del servicio ($ ARS)</label><input id="price" type="number" min="0" step="0.01" placeholder="Se calcula automáticamente" readonly></div>
+    <div class="field"><label for="initialPayment">Importe del pago 1 ($ ARS)</label><input id="initialPayment" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0" oninput="updatePaymentPreview()"></div>
+    <div class="field"><label for="payMethod">Medio de pago 1</label><select id="payMethod" onchange="updatePaymentPreview()"><option>Efectivo</option><option>Transferencia</option><option>Débito</option><option>Crédito</option><option>Otro</option></select></div>
+    <div class="field"><label for="payment2Amount">Segundo pago / otro medio ($ ARS)</label><input id="payment2Amount" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0" oninput="updatePaymentPreview()"></div>
+    <div class="field"><label for="payment2Method">Medio de pago 2</label><select id="payment2Method" onchange="updatePaymentPreview()"><option>Transferencia</option><option>Efectivo</option><option>Débito</option><option>Crédito</option><option>Otro</option></select></div>
+    <div class="field"><label for="payment3Amount">Tercer pago / otro medio ($ ARS)</label><input id="payment3Amount" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0" oninput="updatePaymentPreview()"></div>
+    <div class="field"><label for="payment3Method">Medio de pago 3</label><select id="payment3Method" onchange="updatePaymentPreview()"><option>Débito</option><option>Efectivo</option><option>Transferencia</option><option>Crédito</option><option>Otro</option></select></div>
+    <div class="field"><label for="weight">Peso aproximado (kg)</label><input id="weight" type="number" min="0" step="0.1" inputmode="decimal" placeholder="Opcional"></div>
+    <div class="field"><label for="description">Descripción / identificación</label><input id="description" placeholder="Color, marca, cinta u otra seña"></div>
+    <div class="field"><label for="phone">Teléfono de contacto (opcional)</label><input id="phone" type="tel" autocomplete="tel" placeholder="Teléfono"></div>
+   </div>
+   <div class="field" style="margin-top:10px"><label for="notes">Observaciones del estado del bulto</label><textarea id="notes" placeholder="Daños visibles, embalaje, aclaraciones..."></textarea></div>
+   <div class="notice" style="margin-top:12px">Antes de guardar, verificá el nombre y los precios por bulto y embalaje. No guardes datos innecesarios del documento del pasajero.</div>
+   <div class="notice oknotice" id="priceBreakdown">1 bulto × $ 0 + embalaje = $ 0</div>
+   <div class="notice" id="paymentPreview" aria-live="polite">Estado de pago: IMPAGO · Recibido $ 0 de $ 0</div>
+   <div class="actions"><button class="primary" id="saveBtn" onclick="saveRecord()">✓ Registrar bultos y generar tickets</button><button class="secondary" onclick="resetForm()">Limpiar formulario</button></div>
+   <input id="editId" type="hidden">
+  </div>
+ </section>
+
+ <section id="tab-inventory" class="hidden">
+  <div class="panel">
+   <div class="listhead"><h2>Depósito e historial</h2><span class="tag" id="listCount">0 registros</span></div>
+   <div class="searchrow">
+    <input class="search" id="search" placeholder="Escaneá o buscá código de grupo, ticket, DNI o pasajero..." oninput="renderRecords()" onkeydown="if(event.key==='Enter'){renderRecords()}">
+    <select class="search" id="statusFilter" onchange="renderRecords()"><option value="all">Todos los estados</option><option value="stored">En depósito</option><option value="delivered">Entregados</option></select>
+    <select class="search" id="kindFilter" onchange="renderRecords()"><option value="all">Todos los bultos</option><option>Valija</option><option>Bolsa</option><option>Caja</option><option>Mochila</option><option>Otro</option></select>
+   </div>
+   <div class="actions no-print"><button class="sky small" onclick="printBatchLabels()">🏷 Imprimir etiquetas de los resultados</button><button class="secondary small" onclick="exportCSV()">⬇ Exportar CSV</button><button class="secondary small" onclick="window.print()">Imprimir listado</button></div>
+   <div id="recordsList"></div>
+  </div>
+ </section>
+
+ <section id="tab-payments" class="hidden">
+  <div class="panel">
+   <h2>Cobrar por código de grupo</h2>
+   <p class="sub">Buscá el código único del pasajero. El sistema reúne todos sus bultos, calcula la deuda total y permite combinar efectivo, transferencia, débito o crédito en un mismo cobro. La transferencia suma un 3,5% sobre el importe asignado a ese medio.</p>
+   <div class="grid two">
+    <div class="field"><label for="paymentGroupCode">Código único del grupo o número de ticket</label><input id="paymentGroupCode" list="paymentGroupCodes" placeholder="Ej. GRP-261026-ABCD" autocomplete="off" oninput="updateGroupPaymentPreview()"><datalist id="paymentGroupCodes"></datalist><small class="meta">Ingresá el código impreso en el comprobante del pasajero.</small></div>
+    <div class="field"><label for="extraBy">Cobrado por</label><input id="extraBy" placeholder="Nombre del empleado"></div>
+   </div>
+   <div id="groupPaymentPreview" class="notice" aria-live="polite">Ingresá un código de grupo para ver los bultos y el saldo pendiente.</div>
+   <h3 style="font-size:14px;color:var(--navy);margin:12px 0 8px">Cómo paga el cliente</h3>
+   <div class="grid two">
+    <div class="field"><label for="extraAmount">Importe base 1 ($ ARS)</label><input id="extraAmount" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0" oninput="updateGroupPaymentPreview()"></div>
+    <div class="field"><label for="extraMethod">Medio de pago 1</label><select id="extraMethod" onchange="updateGroupPaymentPreview()"><option>Efectivo</option><option>Transferencia</option><option>Débito</option><option>Crédito</option><option>Otro</option></select></div>
+    <div class="field"><label for="extraAmount2">Importe base 2 ($ ARS)</label><input id="extraAmount2" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0" oninput="updateGroupPaymentPreview()"></div>
+    <div class="field"><label for="extraMethod2">Medio de pago 2</label><select id="extraMethod2" onchange="updateGroupPaymentPreview()"><option>Transferencia</option><option>Efectivo</option><option>Débito</option><option>Crédito</option><option>Otro</option></select></div>
+    <div class="field"><label for="extraAmount3">Importe base 3 ($ ARS)</label><input id="extraAmount3" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0" oninput="updateGroupPaymentPreview()"></div>
+    <div class="field"><label for="extraMethod3">Medio de pago 3</label><select id="extraMethod3" onchange="updateGroupPaymentPreview()"><option>Débito</option><option>Efectivo</option><option>Transferencia</option><option>Crédito</option><option>Otro</option></select></div>
+   </div>
+   <div class="actions"><button class="primary" onclick="addPayment()">✓ Confirmar cobro del grupo</button></div>
+   <select id="paymentRecord" class="hidden" aria-hidden="true"></select>
+  </div>
+  <div class="panel">
+   <h2>Apertura y cierre de caja por turno</h2>
+   <p class="sub">Cada turno queda identificado por empleado. Al cerrar, ingresá por separado el efectivo físico y el dinero en cuenta/medios electrónicos. El sistema compara ambos y muestra el total esperado, el total contado y la diferencia.</p>
+   <div id="shiftStatus" class="notice">Caja cerrada. Abrí un turno antes de registrar cobros.</div>
+   <div id="openShiftForm">
+    <div class="grid two"><div class="field"><label for="shiftEmployee">Empleado que abre la caja *</label><input id="shiftEmployee" placeholder="Nombre y apellido"></div><div class="field"><label for="openingCash">Efectivo inicial en caja ($)</label><input id="openingCash" type="number" min="0" step="0.01" value="0" inputmode="decimal"></div></div>
+    <div class="actions"><button class="primary" onclick="openShift()">Abrir caja</button></div>
+   </div>
+   <div id="activeShiftPanel" class="hidden">
+    <div class="grid two"><div class="field"><label for="expenseAmount">Gasto / retiro de efectivo ($)</label><input id="expenseAmount" type="number" min="0.01" step="0.01" placeholder="Importe"></div><div class="field"><label for="expenseNote">Motivo del gasto o retiro</label><input id="expenseNote" placeholder="Ej. compra de insumos"></div></div>
+    <div class="actions"><button class="secondary" onclick="addExpense()">Registrar gasto/retiro</button></div>
+    <div id="shiftTotals"></div>
+    <div class="divider"></div>
+    <div class="grid two"><div class="field"><label for="countedCash">Efectivo contado al cierre ($) *</label><input id="countedCash" type="number" min="0" step="0.01" inputmode="decimal" placeholder="Contá los billetes y monedas"></div><div class="field"><label for="countedAccount">Dinero contado en cuenta / medios electrónicos ($) *</label><input id="countedAccount" type="number" min="0" step="0.01" inputmode="decimal" placeholder="Transferencias, débito, crédito"></div><div class="field"><label for="handedTo">Entregado a / responsable que recibe *</label><input id="handedTo" placeholder="Nombre de quien recibe la caja"></div></div>
+    <div class="field" style="margin-top:10px"><label for="closeNote">Observaciones del cierre</label><input id="closeNote" placeholder="Diferencias o aclaraciones"></div>
+    <div class="actions"><button class="danger" onclick="closeShift()">Cerrar turno y registrar entrega</button></div>
+   </div>
+  </div>
+  <div class="panel"><h2>Movimientos de caja y corrección de errores</h2><p class="sub">Los errores no se borran sin rastro: se anulan con motivo para mantener el control.</p><div id="paymentHistory"></div></div>
+  <div class="panel"><h2>Historial de turnos cerrados</h2><div id="shiftHistory"></div></div>
+ </section>
+
+ <section id="tab-reports" class="hidden">
+  <div class="panel">
+   <h2>Resumen e informes</h2>
+   <div class="grid two">
+    <div class="stat"><span>Importe total de servicios</span><strong class="money" id="repBilled">$ 0</strong></div>
+    <div class="stat"><span>Total cobrado</span><strong class="money" id="repPaid">$ 0</strong></div>
+    <div class="stat"><span>Saldo por cobrar</span><strong class="money" id="repDebt">$ 0</strong></div>
+    <div class="stat"><span>Bultos pendientes de retiro</span><strong id="repStored">0</strong></div>
+   </div>
+   <div class="divider"></div>
+   <div class="actions"><button class="primary" onclick="exportCSV()">Exportar todos los bultos (CSV)</button><button class="secondary" onclick="exportPayments()">Exportar caja (CSV)</button><button class="secondary" onclick="backupJSON()">Crear copia de seguridad</button></div>
+   <p class="meta" style="margin-top:12px">Los archivos CSV se abren con Excel o Google Sheets. La copia JSON sirve para respaldar y recuperar los registros.</p>
+  </div>
+  <div class="panel">
+   <h2>Restaurar copia de seguridad</h2>
+   <p class="sub">Importá un archivo JSON creado por esta aplicación. La importación reemplaza los registros actuales; exportá una copia antes de continuar.</p>
+   <input type="file" id="restoreFile" accept=".json,application/json">
+   <div class="actions"><button class="danger" onclick="restoreJSON()">Restaurar copia</button></div>
+  </div>
+  <div class="panel">
+   <h2>Configuración de nube</h2>
+   <p id="cloudSummary" class="meta">Sin configurar. Los datos se guardan localmente en este dispositivo.</p>
+   <div class="actions"><button class="secondary" onclick="openCloud()">Configurar Firebase</button><button class="secondary" onclick="syncCloud()">Sincronizar ahora</button></div>
+  </div>
+ </section>
+ <div class="foot">Viajes MDQ · Control interno de equipaje · Conservá copias de seguridad periódicas.</div>
+</main>
+
+<div id="cloudModal" class="modalback hidden">
+ <div class="modal">
+  <button class="close small" onclick="closeCloud()">Cerrar ✕</button>
+  <h2>Configurar almacenamiento en la nube</h2>
+  <div class="notice">Esta opción requiere un proyecto Firebase creado por vos, Authentication con correo/contraseña, Firestore y reglas seguras. No pegues contraseñas ni claves privadas acá. La configuración web de Firebase no es una contraseña, pero debe estar protegida por reglas de acceso.</div>
+  <div class="field"><label for="fbApiKey">apiKey</label><input id="fbApiKey" autocomplete="off"></div>
+  <div class="field"><label for="fbAuthDomain">authDomain</label><input id="fbAuthDomain" autocomplete="off" placeholder="tu-proyecto.firebaseapp.com"></div>
+  <div class="field"><label for="fbProjectId">projectId</label><input id="fbProjectId" autocomplete="off"></div>
+  <div class="field"><label for="fbAppId">appId</label><input id="fbAppId" autocomplete="off"></div>
+  <div class="divider"></div>
+  <h2>Cuenta autorizada</h2>
+  <div class="field"><label for="fbEmail">Correo</label><input id="fbEmail" type="email" autocomplete="username"></div>
+  <div class="field"><label for="fbPassword">Contraseña de Firebase Authentication</label><input id="fbPassword" type="password" autocomplete="current-password"></div>
+  <div class="actions"><button class="primary" onclick="connectCloud()">Conectar y sincronizar</button><button class="danger" onclick="disconnectCloud()">Desconectar nube</button></div>
+  <p class="meta" style="margin-top:12px">Para usarlo en más de un dispositivo, publicá este archivo en un sitio HTTPS y configurá Firebase. La sincronización solo estará activa después de completar la configuración y el inicio de sesión.</p>
+  <div id="cloudError" class="meta"></div>
+ </div>
+</div>
+
+<script>
+const DBKEY='viajesmdq_luggage_v2_records', PAYKEY='viajesmdq_luggage_v2_payments', EMPKEY='viajesmdq_luggage_v2_employee', CFGKEY='viajesmdq_luggage_v2_firebase', TICKETKEY='viajesmdq_luggage_ticket_counter', SHIFTKEY='viajesmdq_luggage_v2_shifts', EXPENSEKEY='viajesmdq_luggage_v2_expenses';
+let records=[], payments=[], shifts=[], expenses=[], firebaseApp=null, cloudAuth=null, cloudDb=null, cloudUser=null, cloudEnabled=false, editingId=null;
+const $=id=>document.getElementById(id);
+const money=n=>new Intl.NumberFormat('es-AR',{style:'currency',currency:'ARS',maximumFractionDigits:2}).format(Number(n)||0);
+const nowISO=()=>new Date().toISOString();
+const dateTime=iso=>iso?new Date(iso).toLocaleString('es-AR',{dateStyle:'short',timeStyle:'short'}):'—';
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function loadLocal(){try{records=JSON.parse(localStorage.getItem(DBKEY)||'[]');if(!Array.isArray(records))records=[]}catch{records=[]}try{payments=JSON.parse(localStorage.getItem(PAYKEY)||'[]');if(!Array.isArray(payments))payments=[]}catch{payments=[]}try{shifts=JSON.parse(localStorage.getItem(SHIFTKEY)||'[]');if(!Array.isArray(shifts))shifts=[]}catch{shifts=[]}try{expenses=JSON.parse(localStorage.getItem(EXPENSEKEY)||'[]');if(!Array.isArray(expenses))expenses=[]}catch{expenses=[]}}
+function persistLocal(){localStorage.setItem(DBKEY,JSON.stringify(records));localStorage.setItem(PAYKEY,JSON.stringify(payments));localStorage.setItem(SHIFTKEY,JSON.stringify(shifts));localStorage.setItem(EXPENSEKEY,JSON.stringify(expenses))}
+function activeShift(){return shifts.find(x=>x.status==='open')||null}
+function validPayments(){return payments.filter(p=>!p.voidedAt)}
+function shiftCashTotals(sh){const ps=validPayments().filter(p=>p.shiftId===sh.id),es=expenses.filter(e=>e.shiftId===sh.id),sum=m=>ps.filter(p=>p.method===m).reduce((a,p)=>a+Number(p.amount||0),0);return {cashIn:sum('Efectivo'),cashOut:es.reduce((a,e)=>a+Number(e.amount||0),0),transfer:sum('Transferencia'),debit:sum('Débito'),credit:sum('Crédito'),other:ps.filter(p=>!['Efectivo','Transferencia','Débito','Crédito'].includes(p.method)).reduce((a,p)=>a+Number(p.amount||0),0),nonCash:ps.filter(p=>p.method!=='Efectivo').reduce((a,p)=>a+Number(p.amount||0),0)}}
+function id(){return 'MDQ-'+new Date().toISOString().slice(2,10).replace(/-/g,'')+'-'+Math.random().toString(36).slice(2,7).toUpperCase()}
+function nextTicket(){let n=Number(localStorage.getItem(TICKETKEY)||0);if(!n){n=records.reduce((m,r)=>Math.max(m,Number(String(r.ticket||'').replace(/\D/g,''))||0),0)}n++;localStorage.setItem(TICKETKEY,String(n));return String(n).padStart(6,'0')}
+function groupCode(){return 'GRP-'+new Date().toISOString().slice(2,10).replace(/-/g,'')+'-'+Math.random().toString(36).slice(2,6).toUpperCase()}
+function calcPaid(r){return (r.payments||[]).filter(p=>!p.voidedAt).reduce((s,p)=>s+Number(p.amount||0),0)}
+function balance(r){return Math.max(0,Number(r.price||0)-calcPaid(r))}
+function fmtDate(iso){return iso?new Date(iso).toLocaleString('es-AR'):'—'}
+function updateDashboard(){
+ $('statTotal').textContent=records.length;
+ $('statStored').textContent=records.filter(r=>r.status==='stored').length;
+ $('statDelivered').textContent=records.filter(r=>r.status==='delivered').length;
+ $('statPending').textContent=money(records.reduce((s,r)=>s+balance(r),0));
+ $('repBilled').textContent=money(records.reduce((s,r)=>s+Number(r.price||0),0));
+ $('repPaid').textContent=money(records.reduce((s,r)=>s+calcPaid(r),0));
+ $('repDebt').textContent=money(records.reduce((s,r)=>s+balance(r),0));
+ $('repStored').textContent=records.filter(r=>r.status==='stored').length;
+ $('cloudSummary').textContent=cloudEnabled?'Conectado como '+(cloudUser?.email||'usuario autorizado')+'. La sincronización está habilitada.':'Sin configurar. Los datos se guardan localmente en este dispositivo.';
+ $('storageState').textContent=cloudEnabled?'☁ Nube conectada':'● Guardado en este dispositivo';
+ $('storageState').style.background=cloudEnabled?'#168653':'#ffffff18';
+}
+function showTab(tab){
+ document.querySelectorAll('[id^="tab-"]').forEach(el=>el.classList.add('hidden'));
+ $('tab-'+tab).classList.remove('hidden');
+ document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));
+ if(tab==='inventory')renderRecords(); if(tab==='payments')renderPayments(); if(tab==='reports')updateDashboard();
+ window.scrollTo({top:0,behavior:'smooth'});
+}
+function updatePriceTotal(){
+ const qty=Math.max(1,Math.min(46,parseInt($('qty').value||'1',10)||1));
+ const unit=Math.max(0,Number($('unitPrice').value||0));
+ const days=Math.max(1,Math.min(365,parseInt($('stayDays')?.value||'1',10)||1));
+ const pack=Math.max(0,Number($('packingPrice').value||0));
+ const total=Math.round((qty*unit*days+pack+Number.EPSILON)*100)/100;
+ $('price').value=total.toFixed(2);
+ $('priceBreakdown').textContent=qty+' bulto(s) × '+money(unit)+' × '+days+' día(s) + embalaje '+money(pack)+' = '+money(total)+' total';
+ updatePaymentPreview();
+}
+function syncStayDaysFromPickup(){const val=$('pickupAt')?.value;if(!val)return;const start=new Date();const end=new Date(val);if(Number.isNaN(end.getTime()))return;const startDay=new Date(start.getFullYear(),start.getMonth(),start.getDate());const endDay=new Date(end.getFullYear(),end.getMonth(),end.getDate());const days=Math.max(1,Math.ceil((endDay-startDay)/86400000)+1);$('stayDays').value=String(Math.min(365,days));updatePriceTotal()}
+function paymentInputs(){return [{amount:Number($('initialPayment')?.value||0),method:$('payMethod')?.value||'Efectivo'},{amount:Number($('payment2Amount')?.value||0),method:$('payment2Method')?.value||'Transferencia'},{amount:Number($('payment3Amount')?.value||0),method:$('payment3Method')?.value||'Débito'}].filter(p=>p.amount>0).map(p=>({...p,fee:p.method==='Transferencia'?Math.round(p.amount*0.035*100)/100:0,gross:Math.round((p.amount+(p.method==='Transferencia'?p.amount*0.035:0))*100)/100}))}
+function updatePaymentPreview(){
+ const baseTotal=Number($('price')?.value||0), entries=paymentInputs(), fee=entries.reduce((s,p)=>s+p.fee,0), total=Math.round((baseTotal+fee)*100)/100, received=entries.reduce((sum,p)=>sum+p.gross,0), remaining=Math.max(0,Math.round((total-received)*100)/100);
+ const el=$('paymentPreview');if(!el)return;
+ let state=received<=0?'IMPAGO':received+0.009>=total?'PAGÓ · TOTAL CUBIERTO':'PAGO PARCIAL';
+ el.className='notice '+(state==='PAGÓ · TOTAL CUBIERTO'?'oknotice':'');
+ el.textContent='Estado de pago: '+state+' · Servicio '+money(baseTotal)+(fee>0?' · Recargo transferencia 3,5% '+money(fee):'')+' · Total a cobrar '+money(total)+' · Cobrado '+money(received)+(remaining>0?' · Falta cobrar '+money(remaining):' · Sin saldo pendiente');
+}
+function resetForm(){
+ ['editId','passenger','dni','price','initialPayment','payment2Amount','payment3Amount','weight','description','phone','notes','pickupAt'].forEach(k=>$(k).value='');
+ $('unitPrice').value='4000';$('stayDays').value='1';$('packingPrice').value='0';$('qty').value='1';$('kind').value='Valija';$('payMethod').value='Efectivo';$('payment2Method').value='Transferencia';$('payment3Method').value='Débito';$('receivedBy').value=localStorage.getItem(EMPKEY)||'';
+ $('formTitle').textContent='Registrar recepción de equipaje';$('saveBtn').textContent='✓ Registrar bultos y generar tickets';editingId=null;updatePriceTotal();
+}
+function saveRecord(){
+ const passenger=$('passenger').value.trim(), receivedBy=$('receivedBy').value.trim(), unitPrice=Number($('unitPrice').value), stayDays=Math.max(1,Math.min(365,parseInt($('stayDays').value||'1',10)||1)), packingPrice=Math.max(0,Number($('packingPrice').value||0)), qty=Math.max(1,Math.min(46,parseInt($('qty').value||'1',10)||1)), baseTotal=Number($('price').value), initialPayments=paymentInputs(), transferFee=initialPayments.reduce((sum,p)=>sum+p.fee,0), total=Math.round((baseTotal+transferFee)*100)/100, initial=initialPayments.reduce((sum,p)=>sum+p.gross,0), pickupAt=$('pickupAt').value?new Date($('pickupAt').value).toISOString():null;
+ if(!passenger||!receivedBy||$('unitPrice').value===''){alert('Completá nombre del pasajero, recibido por y precio por bulto.');return}
+ if(unitPrice<0||initialPayments.some(p=>p.amount<0)||initial>total+0.009){alert('Revisá los importes: los pagos ingresados no pueden superar el total del grupo ('+money(total)+').');return}
+ if(initial>0&&!activeShift()){alert('Primero abrí la caja con el nombre del empleado responsable. Los pagos deben quedar asociados a un turno.');return}
+ const editId=$('editId').value;
+ if(editId){
+  const r=records.find(x=>x.id===editId);if(!r)return;
+  Object.assign(r,{kind:$('kind').value,passenger,dni:$('dni').value.trim(),receivedBy,price:unitPrice*stayDays+packingPrice,unitPrice,stayDays,packingPrice,pickupAt,weight:$('weight').value,description:$('description').value.trim(),phone:$('phone').value.trim(),notes:$('notes').value.trim(),updatedAt:nowISO()});
+  localStorage.setItem(EMPKEY,receivedBy);persistLocal();resetForm();updateDashboard();renderRecords();renderPaymentSelect();if(cloudEnabled)syncCloud();alert('Registro actualizado.');showTab('inventory');return;
+ }
+ const created=[], sharedCode=groupCode();
+ for(let i=0;i<qty;i++){
+  const receivedAt=nowISO(), piecePacking=i===0?packingPrice:0, pieceTotal=Math.round((unitPrice*stayDays+piecePacking+Number.EPSILON)*100)/100;
+  const r={id:id(),ticket:nextTicket(),kind:$('kind').value,passenger,dni:$('dni').value.trim(),ticketCode:sharedCode,groupCode:sharedCode,receivedBy,price:pieceTotal,unitPrice,stayDays,packingPrice:piecePacking,pickupAt,quantity:1,batchQuantity:qty,batchIndex:i+1,weight:$('weight').value,description:$('description').value.trim(),phone:$('phone').value.trim(),notes:$('notes').value.trim(),receivedAt,deliveredAt:null,deliveredBy:'',status:'stored',payments:[]};
+  records.unshift(r);created.push(r);
+ }
+ if(initialPayments.length){
+  if(transferFee>0){const perPiece=Math.round((transferFee/created.length)*100)/100;let assigned=0;created.forEach((r,i)=>{const feeShare=i===created.length-1?Math.round((transferFee-assigned)*100)/100:perPiece;r.price=Math.round((r.price+feeShare)*100)/100;assigned+=feeShare;});}
+  initialPayments.forEach((entry,entryIndex)=>{
+   let remaining=entry.gross;
+   created.forEach(r=>{const already=calcPaid(r), room=Math.max(0,Number(r.price)-already), allocated=Math.min(room,remaining);if(allocated>0){const p={id:id(),amount:allocated,method:entry.method,by:receivedBy,at:nowISO(),note:'Pago inicial '+(entryIndex+1)+(entry.fee?' · incluye recargo transferencia 3,5%':'') ,shiftId:activeShift()?.id||null};r.payments.push(p);payments.unshift({id:p.id,recordId:r.id,code:r.id,passenger,amount:allocated,method:p.method,by:receivedBy,at:p.at,note:p.note,shiftId:p.shiftId});remaining=Math.round((remaining-allocated)*100)/100;}});
+  });
+ }
+ localStorage.setItem(EMPKEY,receivedBy);persistLocal();resetForm();updateDashboard();renderRecords();renderPaymentSelect();if(cloudEnabled)syncCloud();
+ alert('Se registraron '+created.length+' bulto(s). Cada uno tiene un ticket único para imprimir y pegar.');showTab('inventory');
+}
+function renderRecords(){
+ const q=($('search')?.value||'').trim().toLowerCase(), st=$('statusFilter')?.value||'all', kind=$('kindFilter')?.value||'all';
+ const filtered=records.filter(r=>{const hay=[r.id,r.passenger,r.dni,r.ticket,r.ticketCode,r.groupCode,r.description].join(' ').toLowerCase();return(!q||hay.includes(q))&&(st==='all'||r.status===st)&&(kind==='all'||r.kind===kind)});
+ $('listCount').textContent=filtered.length+' bultos · '+new Set(filtered.map(r=>r.groupCode||r.ticketCode||r.id)).size+' grupos';
+ const root=$('recordsList');if(!filtered.length){root.innerHTML='<div class="empty">No hay registros que coincidan con la búsqueda.</div>';return}
+ const groups=new Map();filtered.forEach(r=>{const key=r.groupCode||r.ticketCode||r.id;if(!groups.has(key))groups.set(key,[]);groups.get(key).push(r)});
+ root.innerHTML=Array.from(groups.entries()).map(([code,items])=>{
+  items.sort((a,b)=>(a.batchIndex||1)-(b.batchIndex||1)||String(a.ticket).localeCompare(String(b.ticket)));
+  const first=items[0],allGroup=records.filter(r=>(r.groupCode||r.ticketCode||r.id)===code).sort((a,b)=>(a.batchIndex||1)-(b.batchIndex||1));
+  const paid=allGroup.reduce((n,r)=>n+calcPaid(r),0),total=allGroup.reduce((n,r)=>n+Number(r.price||0),0),due=Math.max(0,total-paid);
+  const paidLabel=due<=.009?'PAGÓ':paid>0?'PAGO PARCIAL':'NO PAGÓ';
+  const delivered=allGroup.filter(r=>r.status==='delivered').length;
+  return `<article class="record ${delivered===allGroup.length?'delivered':'stored'}">
+   <div class="recordtop"><div><h3>📁 ${esc(first.passenger)} · ${allGroup.length} bulto(s)</h3><div class="meta">Código de grupo: <b>${esc(code)}</b> · DNI: <b>${esc(first.dni||'—')}</b></div></div><span class="pill ${delivered===allGroup.length?'delivered':'stored'}">${delivered===allGroup.length?'✓ Todos entregados':delivered?'📦 '+(allGroup.length-delivered)+' en depósito':'📦 En depósito'}</span></div>
+   <div class="recordgrid"><div class="kv"><span>Total del grupo</span><b>${money(total)}</b></div><div class="kv"><span>Estado de pago</span><b style="color:${due<=.009?'#087343':paid>0?'#8b5a00':'#c93636'}">${due<=.009?'✓ PAGÓ':paid>0?'PAGO PARCIAL':'✕ NO PAGÓ'}</b><small class="meta">Cobrado: ${money(paid)}${due>.009?' · Falta: '+money(due):' · Sin saldo pendiente'}</small></div><div class="kv"><span>Ingreso</span><b>${esc(dateTime(first.receivedAt))}</b></div><div class="kv"><span>Retiro previsto</span><b>${esc(dateTime(first.pickupAt))}</b></div></div>
+   <div class="meta">Recibió: ${esc(first.receivedBy||'—')} · ${allGroup.length} ticket(s) correlativos: ${allGroup.map(r=>esc(r.ticket||'—')).join(', ')}</div>
+   <div style="margin-top:10px;border-top:1px solid #dce5ef;padding-top:8px"><b>Detalle de cada bulto</b>${allGroup.map(r=>`<div style="padding:9px 0;border-bottom:1px solid #e6edf5"><div class="recordtop"><div>${r.status==='stored'?`<label style="display:flex;align-items:center;gap:7px;margin-bottom:5px;font-size:12px;font-weight:700"><input type="checkbox" class="delivery-pick" data-group="${esc(code)}" value="${esc(r.id)}" style="width:18px;height:18px"> Seleccionar para entrega</label>`:''}<b>${esc(r.kind)} · Ticket N.º ${esc(r.ticket||'—')}</b><div class="meta">Bulto ${r.batchIndex||1}/${r.batchQuantity||allGroup.length} · ${money(r.unitPrice??r.price)} × ${r.stayDays||1} día(s)${Number(r.packingPrice||0)>0?' + embalaje '+money(r.packingPrice):''}</div></div><span class="pill ${r.status}">${r.status==='stored'?'En depósito':'Entregado'}</span></div><div class="meta">Pago: <b style="color:${balance(r)<=.009?'#087343':calcPaid(r)>0?'#8b5a00':'#c93636'}">${balance(r)<=.009?'PAGÓ':calcPaid(r)>0?'PAGO PARCIAL':'NO PAGÓ'}</b> · Ingreso: ${esc(dateTime(r.receivedAt))}${r.status==='delivered'?' · Entregado: '+esc(dateTime(r.deliveredAt)):''}</div><div class="actions no-print">${r.status==='stored'?`<button class="success small" onclick="deliverRecord('${r.id}')">✓ Marcar entregado</button>`:''}<button class="secondary small" onclick="editRecord('${r.id}')">Editar</button><button class="sky small" onclick="printLabel('${r.id}')">Etiqueta</button><button class="secondary small" onclick="quickPayment('${r.id}')">＋ Pago</button><button class="danger small" onclick="deleteRecord('${r.id}')">Eliminar</button></div></div>`).join('')}</div>
+   <div class="actions no-print">${delivered<allGroup.length?`<button class="success small" onclick="deliverGroup('${esc(code)}',false)">✓ Entregar todo el grupo</button><button class="sky small" onclick="deliverGroup('${esc(code)}',true)">📦 Entregar solo seleccionados</button>`:''}<button class="primary small" onclick="printGroupPack('${esc(code)}')">🖨 Imprimir duplicado por bulto + recibo del pasajero</button><button class="secondary small" onclick="printGroupReceipt('${esc(code)}')">🎟 Recibo con todos los tickets</button></div>
+  </article>`;
+ }).join('');updateDashboard();
+}
+function deliverGroup(code,selectedOnly=false){
+ const group=records.filter(r=>(r.groupCode||r.ticketCode||r.id)===code&&r.status==='stored');if(!group.length){alert('No hay bultos pendientes de entrega en este grupo.');return}
+ let targets=group;
+ if(selectedOnly){const ids=[...document.querySelectorAll('.delivery-pick:checked')].filter(el=>el.dataset.group===code).map(el=>el.value);targets=group.filter(r=>ids.includes(r.id));if(!targets.length){alert('Marcá uno o más bultos que quieras entregar.');return}}
+ const by=prompt('Nombre de quien entrega los bultos:', $('receivedBy').value||localStorage.getItem(EMPKEY)||'');if(by===null)return;if(!by.trim()){alert('Ingresá el nombre del responsable de la entrega.');return}
+ const due=targets.reduce((n,r)=>n+balance(r),0),tickets=targets.map(r=>r.ticket||r.id).join(', ');
+ let msg='Confirmar entrega de '+targets.length+' bulto(s) a '+group[0].passenger+'?\nTickets: '+tickets+'\nCódigo de grupo: '+code+'\nResponsable: '+by.trim();if(due>0.009)msg+='\n\nATENCIÓN: los bultos seleccionados tienen una deuda de '+money(due)+'. La entrega quedará registrada igualmente si confirmás.';
+ if(!confirm(msg))return;const at=nowISO();targets.forEach(r=>{r.status='delivered';r.deliveredAt=at;r.deliveredBy=by.trim()});localStorage.setItem(EMPKEY,by.trim());persistLocal();renderRecords();if(cloudEnabled)syncCloud();alert('Entrega registrada: '+targets.length+' bulto(s).'+(group.some(r=>r.status==='stored')?' Los demás siguen en depósito.':''));
+}
+function deliverRecord(recordId){const r=records.find(x=>x.id===recordId);if(!r||r.status!=='stored')return;const by=prompt('Nombre de quien entrega el bulto:', $('receivedBy').value||localStorage.getItem(EMPKEY)||'');if(by===null)return;if(!by.trim()){alert('Ingresá el nombre del responsable de la entrega.');return}let msg='Confirmar entrega individual del ticket '+(r.ticket||r.id)+' a '+r.passenger+'?';if(balance(r)>0.009)msg+='\n\nATENCIÓN: queda una deuda de '+money(balance(r))+'. La entrega se registrará si confirmás.';if(!confirm(msg))return;r.status='delivered';r.deliveredAt=nowISO();r.deliveredBy=by.trim();localStorage.setItem(EMPKEY,by.trim());persistLocal();renderRecords();if(cloudEnabled)syncCloud();alert('Entrega individual registrada.');}
+function editRecord(recordId){
+ const r=records.find(x=>x.id===recordId);if(!r)return;
+ $('editId').value=r.id;$('kind').value=r.kind;$('passenger').value=r.passenger;$('dni').value=r.dni||'';$('receivedBy').value=r.receivedBy||'';$('unitPrice').value=(r.unitPrice??r.price);$('stayDays').value=String(r.stayDays||1);$('packingPrice').value=r.packingPrice||0;$('pickupAt').value=r.pickupAt?new Date(r.pickupAt).toLocaleString('sv-SE').replace(' ','T').slice(0,16):'';$('price').value=r.price;$('qty').value='1';updatePriceTotal();$('initialPayment').value='';$('payment2Amount').value='';$('payment3Amount').value='';$('weight').value=r.weight||'';$('description').value=r.description||'';$('phone').value=r.phone||'';$('notes').value=r.notes||'';
+ $('formTitle').textContent='Editar bulto '+r.id+' (los pagos no se modifican aquí)';$('saveBtn').textContent='Guardar cambios';showTab('receive');
+}
+function deleteRecord(recordId){
+ const r=records.find(x=>x.id===recordId);if(!r)return;
+ if(!confirm('¿Eliminar el registro '+r.id+'? Esta acción no se puede deshacer. Se recomienda no borrar registros con pagos; usá una copia de seguridad.'))return;
+ records=records.filter(x=>x.id!==recordId);payments=payments.filter(p=>p.recordId!==recordId);persistLocal();renderRecords();renderPayments();renderPaymentSelect();updateDashboard();if(cloudEnabled)syncCloud();
+}
+function printLabel(recordId){
+ const r=records.find(x=>x.id===recordId);if(!r)return;
+ const w=window.open('','_blank');if(!w){alert('El navegador bloqueó la impresión. Permití ventanas emergentes e intentá otra vez.');return}
+ w.document.write(`<!doctype html><html lang="es"><head><meta charset="utf-8"><title>Etiqueta ${esc(r.id)}</title><style>@page{size:80mm 70mm;margin:3mm}body{font:12px Arial,sans-serif;color:#111;margin:0;padding:3mm}.brand{font-size:15px;font-weight:bold;color:#0B2559;border-bottom:2px solid #00B2FE;padding-bottom:4px}.code{font-size:20px;font-weight:900;letter-spacing:1px;margin:7px 0}.kind{font-size:13px;font-weight:bold}.line{margin:3px 0;overflow-wrap:anywhere}.small{font-size:10px;color:#444}.batch{float:right;font-size:11px}</style></head><body><div class="brand">VIAJES MDQ <span class="batch">${r.batchIndex&&r.batchQuantity>1?'Bulto '+r.batchIndex+'/'+r.batchQuantity:''}</span></div><div class="code">TICKET N.º ${esc(r.ticket||'—')}</div><div class="kind">${esc(r.kind)} · ${esc(r.passenger)}</div><div class="line">Código grupo: <b>${esc(r.groupCode||r.ticketCode||r.id)}</b></div><div class="line">Tarifa diaria: ${money(r.unitPrice??r.price)} × ${r.stayDays||1} día(s) · Embalaje: ${money(r.packingPrice||0)}</div><div class="line">Total: <b>${money(r.price)}</b></div><div class="small">Ingresó al depósito: ${esc(dateTime(r.receivedAt))}</div><div class="small">Retiro previsto: ${esc(dateTime(r.pickupAt))}</div><script>window.onload=()=>window.print()<\/script></body></html>`);w.document.close();
+}
+function printBatchLabels(){
+ const q=($('search')?.value||'').trim().toLowerCase(),st=$('statusFilter')?.value||'all',kind=$('kindFilter')?.value||'all';
+ const list=records.filter(r=>{const hay=[r.id,r.passenger,r.dni,r.ticket,r.ticketCode,r.groupCode].join(' ').toLowerCase();return(!q||hay.includes(q))&&(st==='all'||r.status===st)&&(kind==='all'||r.kind===kind)});
+ if(!list.length){alert('No hay bultos para imprimir.');return}
+ const groups=[...new Set(list.map(r=>r.groupCode||r.ticketCode||r.id))];if(groups.length===1){printGroupPack(groups[0]);return}
+ if(!confirm('Hay '+groups.length+' grupos en los resultados. Se imprimirá cada ticket por duplicado y un recibo consolidado por grupo. ¿Continuar?'))return;
+ const w=window.open('','_blank');if(!w){alert('Permití ventanas emergentes para imprimir.');return}
+ const docs=groups.map(code=>groupPrintHTML(code,true)).join('');w.document.write(printShell(docs,'Impresión de grupos Viajes MDQ'));w.document.close();
+}
+function groupPrintHTML(code,duplicate=true){
+ const list=records.filter(r=>(r.groupCode||r.ticketCode||r.id)===code).sort((a,b)=>(a.batchIndex||1)-(b.batchIndex||1));if(!list.length)return '';
+ const first=list[0];
+ const labels=list.map(r=>{const label=`<section class="label"><div class="brand">VIAJES MDQ <span class="batch">Bulto ${r.batchIndex||1}/${r.batchQuantity||list.length}</span></div><div class="code">TICKET N.º ${esc(r.ticket||'—')}</div><div class="kind">${esc(r.kind)} · ${esc(r.passenger)}</div><div class="line">DNI: <b>${esc(r.dni||'—')}</b></div><div class="line">Código de grupo: <b>${esc(r.groupCode||r.ticketCode||r.id)}</b></div><div class="line">Precio bulto: ${money(r.unitPrice??r.price)}</div><div class="line">Estado de pago: <b>${balance(r)<=.009?'PAGÓ':calcPaid(r)>0?'PAGO PARCIAL':'NO PAGÓ'}</b></div>${Number(r.packingPrice||0)>0?`<div class="line">Embalaje asignado: ${money(r.packingPrice)}</div>`:''}<div class="small">Ingreso: ${esc(dateTime(r.receivedAt))}</div><div class="small">Retiro previsto: ${esc(dateTime(r.pickupAt))}</div><div class="small">Recibió: ${esc(r.receivedBy||'—')}</div><div class="foot">COPIA PARA CONTROL DEL EQUIPAJE</div></section>`;return duplicate?label+label.replace('COPIA PARA CONTROL DEL EQUIPAJE','COPIA PARA EL PASAJERO'):label}).join('');
+ const total=list.reduce((n,r)=>n+Number(r.price||0),0),paid=list.reduce((n,r)=>n+calcPaid(r),0),due=Math.max(0,total-paid);
+ const receipt=`<section class="customer"><h1>VIAJES MDQ</h1><h2>RECIBO DEL PASAJERO · EQUIPAJE</h2><div class="big">CÓDIGO ${esc(code)}</div><p><b>Pasajero:</b> ${esc(first.passenger)}<br><b>DNI:</b> ${esc(first.dni||'—')}<br><b>Fecha y hora de ingreso:</b> ${esc(dateTime(first.receivedAt))}<br><b>Retiro previsto:</b> ${esc(dateTime(first.pickupAt))}</p><h3>Tickets incluidos (${list.length} bultos)</h3><table><thead><tr><th>Ticket</th><th>Bulto</th><th>Precio</th><th>Estado</th></tr></thead><tbody>${list.map(r=>`<tr><td><b>${esc(r.ticket||'—')}</b></td><td>${esc(r.kind)} ${r.batchIndex||1}/${r.batchQuantity||list.length}</td><td>${money(r.price)}</td><td>${balance(r)<=.009?'PAGÓ':calcPaid(r)>0?'PARCIAL':'NO PAGÓ'}</td></tr>`).join('')}</tbody></table><p class="totals"><b>Total:</b> ${money(total)}<br><b>Pagado:</b> ${money(paid)}<br><b>Saldo:</b> ${money(due)} · <b>${due<=.009?'PAGÓ':paid>0?'PAGO PARCIAL':'NO PAGÓ'}</b></p><p class="small">Conservá este recibo y verificá todos los números de ticket al retirar el equipaje.</p></section>`;
+ return labels+receipt;
+}
+function printShell(content,title){return `<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(title)}</title><style>@page{size:80mm auto;margin:3mm}*{box-sizing:border-box}body{font:12px Arial,sans-serif;color:#111;margin:0}.label{min-height:64mm;page-break-after:always;overflow:hidden;padding:2mm 0}.brand{font-size:15px;font-weight:bold;color:#0B2559;border-bottom:2px solid #00B2FE;padding-bottom:4px}.code{font-size:20px;font-weight:900;letter-spacing:1px;margin:7px 0}.kind{font-size:13px;font-weight:bold}.line{margin:3px 0;overflow-wrap:anywhere}.small{font-size:10px;color:#444;margin-top:4px}.batch{float:right;font-size:11px}.foot{margin-top:8px;padding-top:4px;border-top:1px dashed #999;font-size:9px;font-weight:bold}.customer{page-break-before:always;padding:2mm 0}.customer h1{color:#0B2559;margin:0;border-bottom:2px solid #00B2FE;padding-bottom:5px}.customer h2{font-size:16px}.big{font-size:17px;font-weight:bold;margin:8px 0}.customer table{border-collapse:collapse;width:100%;font-size:10px}.customer th,.customer td{border:1px solid #aaa;padding:4px;text-align:left}.totals{border-top:1px solid #aaa;padding-top:8px}.customer .small{font-size:10px}</style></head><body>${content}<script>window.onload=()=>window.print()<\/script></body></html>`}
+function printGroupPack(code){const w=window.open('','_blank');if(!w){alert('Permití ventanas emergentes para imprimir.');return}w.document.write(printShell(groupPrintHTML(code,true),'Tickets duplicados y recibo Viajes MDQ'));w.document.close()}
+function printGroupReceipt(code){const html=groupPrintHTML(code,false);const receiptStart=html.indexOf('<section class="customer">');const w=window.open('','_blank');if(!w){alert('Permití ventanas emergentes para imprimir.');return}w.document.write(printShell(receiptStart>=0?html.slice(receiptStart):html,'Recibo del pasajero Viajes MDQ'));w.document.close()}
+function receipt(recordId){
+ const r=records.find(x=>x.id===recordId);if(!r)return;
+ const w=window.open('','_blank');if(!w){alert('El navegador bloqueó la ventana del comprobante. Permití ventanas emergentes e intentá otra vez.');return}
+ w.document.write(`<!doctype html><html lang="es"><meta charset="utf-8"><title>Comprobante ${esc(r.id)}</title><style>body{font:15px Arial;padding:24px;color:#172033;max-width:600px;margin:auto}h1{color:#0B2559}hr{border:0;border-top:1px solid #ccd5e0;margin:16px 0}.code{font-size:22px;font-weight:bold;background:#eef5fc;padding:12px;border-radius:8px}small{color:#586780}</style><h1>Viajes MDQ</h1><h2>Comprobante de recepción de equipaje</h2><div class="code">TICKET N.º ${esc(r.ticket||r.id)}</div><p><b>Pasajero:</b> ${esc(r.passenger)}<br><b>Documento:</b> ${esc(r.dni||'—')}<br><b>Tipo:</b> ${esc(r.kind)}<br><b>N.º de ticket:</b> ${esc(r.ticket||'—')}<br><b>Código compartido:</b> ${esc(r.groupCode||r.ticketCode||'—')}<br><b>Señas:</b> ${esc(r.description||'—')}</p><hr><p><b>Precio por bulto:</b> ${money(r.unitPrice??r.price)}<br><b>Embalaje:</b> ${money(r.packingPrice||0)}<br><b>Total:</b> ${money(r.price)}<br><b>Pagado:</b> ${money(calcPaid(r))}<br><b>Estado de pago:</b> ${balance(r)<=0.009?'PAGÓ':calcPaid(r)>0?'PAGO PARCIAL':'NO PAGÓ'}${balance(r)>0.009?'<br><b>Falta cobrar:</b> '+money(balance(r)):''}<br><b>Estado del bulto:</b> ${r.status==='stored'?'En depósito':'Entregado'}</p><p><b>Ingreso al depósito:</b> ${esc(dateTime(r.receivedAt))}<br><b>Retiro previsto:</b> ${esc(dateTime(r.pickupAt))}<br><b>Recibió:</b> ${esc(r.receivedBy)}<br><b>Entrega:</b> ${esc(dateTime(r.deliveredAt))}<br><b>Entregó:</b> ${esc(r.deliveredBy||'—')}</p><small>Conservar este comprobante hasta el retiro del equipaje.</small><script>window.onload=()=>window.print()<\/script></html>`);w.document.close();
+}
+function renderPaymentSelect(){
+ const sel=$('paymentRecord');if(sel){const prev=sel.value;sel.innerHTML=records.map(r=>`<option value="${r.id}">${esc(r.id)} · ${esc(r.passenger)} · saldo ${money(balance(r))}</option>`).join('');if(records.some(r=>r.id===prev))sel.value=prev;}
+ const dl=$('paymentGroupCodes');if(dl){const groups=new Map();records.forEach(r=>{const code=r.groupCode||r.ticketCode||r.id;if(!groups.has(code))groups.set(code,r)});dl.innerHTML=[...groups.entries()].map(([code,r])=>`<option value="${esc(code)}">${esc(r.passenger)} · DNI ${esc(r.dni||'—')}</option>`).join('');}
+ updateGroupPaymentPreview();
+}
+function findPaymentGroup(){
+ const raw=String($('paymentGroupCode')?.value||'').trim().toLowerCase();if(!raw)return [];
+ const exact=records.filter(r=>String(r.groupCode||r.ticketCode||r.id).toLowerCase()===raw);
+ if(exact.length)return exact;
+ const byTicket=records.find(r=>String(r.ticket||'').toLowerCase()===raw||String(r.id||'').toLowerCase()===raw);
+ return byTicket?records.filter(r=>(r.groupCode||r.ticketCode||r.id)===(byTicket.groupCode||byTicket.ticketCode||byTicket.id)):[];
+}
+function extraPaymentInputs(){return [{amount:Number($('extraAmount')?.value||0),method:$('extraMethod')?.value||'Efectivo'},{amount:Number($('extraAmount2')?.value||0),method:$('extraMethod2')?.value||'Transferencia'},{amount:Number($('extraAmount3')?.value||0),method:$('extraMethod3')?.value||'Débito'}].filter(p=>p.amount>0).map(p=>({...p,fee:p.method==='Transferencia'?Math.round(p.amount*0.035*100)/100:0,gross:Math.round((p.amount+(p.method==='Transferencia'?p.amount*0.035:0))*100)/100}))}
+function updateGroupPaymentPreview(){
+ const el=$('groupPaymentPreview');if(!el)return;const group=findPaymentGroup(),entries=extraPaymentInputs(),fee=entries.reduce((a,p)=>a+p.fee,0),gross=entries.reduce((a,p)=>a+p.gross,0);
+ if(!group.length){el.className='notice';el.textContent='Ingresá un código de grupo válido para ver todos los bultos, el total y el saldo pendiente.';return}
+ const service=group.reduce((a,r)=>a+Number(r.price||0),0),paid=group.reduce((a,r)=>a+calcPaid(r),0),due=Math.max(0,service-paid);
+ el.className='notice '+(due<=.009?'oknotice':'');el.innerHTML=`<b>${esc(group[0].passenger)}</b> · Código <b>${esc(group[0].groupCode||group[0].ticketCode||group[0].id)}</b><br>${group.length} bulto(s) · Total del servicio: <b>${money(service)}</b><br>Pagado hasta ahora: ${money(paid)} · Saldo actual: <b>${money(due)}</b>${entries.length?`<hr style="border:0;border-top:1px solid #d7e2ee;margin:8px 0">Base de los pagos: ${money(entries.reduce((a,p)=>a+p.amount,0))}<br>Recargo transferencia 3,5%: ${money(fee)}<br><b>Total que se cobrará: ${money(gross)}</b>`:''}`;
+}
+function addPayment(){
+ const group=findPaymentGroup(),entries=extraPaymentInputs(),by=$('extraBy').value.trim()||localStorage.getItem(EMPKEY)||'No especificado';
+ if(!group.length){alert('Ingresá un código de grupo válido o el número de uno de sus tickets.');return}if(!entries.length){alert('Ingresá al menos un importe de pago mayor que cero.');return}
+ const sh=activeShift();if(!sh){alert('Primero abrí la caja con el nombre del empleado responsable.');return}
+ const code=group[0].groupCode||group[0].ticketCode||group[0].id, serviceBefore=group.reduce((a,r)=>a+Number(r.price||0),0), paidBefore=group.reduce((a,r)=>a+calcPaid(r),0),dueBefore=Math.max(0,serviceBefore-paidBefore),feeTotal=entries.reduce((a,p)=>a+p.fee,0),grossTotal=entries.reduce((a,p)=>a+p.gross,0);
+ if(grossTotal>dueBefore+feeTotal+0.009){alert('El cobro ingresado ('+money(grossTotal)+') supera la deuda del grupo más el recargo de transferencia ('+money(dueBefore+feeTotal)+'). Revisá los importes.');return}
+ if(feeTotal>0){const first=group[0];first.price=Math.round((Number(first.price||0)+feeTotal)*100)/100;first.transferFees=(Number(first.transferFees||0)+feeTotal);}
+ const serviceAfter=group.reduce((a,r)=>a+Number(r.price||0),0),paidAfter=group.reduce((a,r)=>a+calcPaid(r),0),dueAfter=Math.max(0,serviceAfter-paidAfter);
+ if(grossTotal>dueAfter+0.009){if(!confirm('El cobro supera el saldo del grupo ('+money(dueAfter)+'). ¿Querés registrar igual?')){if(feeTotal>0){group[0].price=Math.round((Number(group[0].price||0)-feeTotal)*100)/100;group[0].transferFees=Math.max(0,Number(group[0].transferFees||0)-feeTotal)}return}}
+ let paymentCount=0;
+ entries.forEach((entry,entryIndex)=>{
+  let remaining=entry.gross;
+  for(const piece of group){if(remaining<=0.009)break;const room=balance(piece),allocated=Math.min(room,remaining);if(allocated<=0)continue;
+   const p={id:id(),amount:Math.round(allocated*100)/100,method:entry.method,by,at:nowISO(),note:'Pago de grupo '+code+' · medio '+(entryIndex+1)+(entry.fee?' · incluye recargo transferencia 3,5% ('+money(entry.fee)+')':''),shiftId:sh.id};piece.payments=piece.payments||[];piece.payments.push(p);payments.unshift({id:p.id,recordId:piece.id,code,groupCode:code,passenger:piece.passenger,amount:p.amount,method:p.method,by,at:p.at,note:p.note,shiftId:p.shiftId});remaining=Math.round((remaining-allocated)*100)/100;paymentCount++;
+  }
+ });
+ ['extraAmount','extraAmount2','extraAmount3'].forEach(k=>$(k).value='');persistLocal();renderPaymentSelect();renderPayments();renderRecords();updateDashboard();if(cloudEnabled)syncCloud();
+ const dueNow=group.reduce((a,r)=>a+balance(r),0);alert('Cobro registrado para '+group[0].passenger+'. Total ingresado: '+money(grossTotal)+'. '+(dueNow<=.009?'PAGADO · saldo pendiente $ 0.':('Saldo pendiente: '+money(dueNow)))+' Los movimientos quedaron asociados a la caja del turno.');
+}
+function quickPayment(recordId){const r=records.find(x=>x.id===recordId);if(!r)return;showTab('payments');renderPaymentSelect();$('paymentGroupCode').value=r.groupCode||r.ticketCode||r.id;updateGroupPaymentPreview();$('extraAmount').focus()}
+function renderPayments(){
+ renderPaymentSelect();const root=$('paymentHistory');renderShiftUI();
+ if(!payments.length){root.innerHTML='<div class="empty">Todavía no hay movimientos de caja.</div>';return}
+ root.innerHTML='<div class="tablewrap"><table><thead><tr><th>Fecha</th><th>Bulto</th><th>Pasajero</th><th>Importe</th><th>Medio</th><th>Cobró</th><th>Turno</th><th>Estado</th><th>Acción</th></tr></thead><tbody>'+payments.slice().sort((a,b)=>b.at.localeCompare(a.at)).map(p=>`<tr><td>${esc(dateTime(p.at))}</td><td>${esc(p.groupCode||p.code||p.recordId)}</td><td>${esc(p.passenger||'—')}</td><td>${money(p.amount)}</td><td>${esc(p.method)}</td><td>${esc(p.by)}</td><td>${esc(shifts.find(x=>x.id===p.shiftId)?.employee||'Sin turno')}</td><td>${p.voidedAt?'ANULADO'+(p.voidReason?' · '+esc(p.voidReason):''):'Válido'}</td><td>${p.voidedAt?'—':`<button class="danger small" onclick="voidPayment('${p.id}')">Corregir/anular</button>`}</td></tr>`).join('')+'</tbody></table></div>';
+}
+function openShift(){
+ if(activeShift()){alert('Ya hay una caja abierta. Cerrá ese turno antes de abrir otro.');return}
+ const employee=$('shiftEmployee').value.trim(),opening=Number($('openingCash').value||0);if(!employee){alert('Ingresá el nombre de quien abre la caja.');return}if(opening<0){alert('El efectivo inicial no puede ser negativo.');return}
+ const sh={id:id(),employee,openedAt:nowISO(),openingCash:opening,status:'open'};shifts.unshift(sh);localStorage.setItem(EMPKEY,employee);persistLocal();renderPayments();if(cloudEnabled)syncCloud();alert('Caja abierta para '+employee+'.');
+}
+function addExpense(){
+ const sh=activeShift(),amount=Number($('expenseAmount').value),note=$('expenseNote').value.trim();if(!sh){alert('No hay una caja abierta.');return}if(!(amount>0)||!note){alert('Ingresá un importe y el motivo del gasto/retiro.');return}
+ if(!confirm('Registrar salida de efectivo por '+money(amount)+'?'))return;expenses.unshift({id:id(),shiftId:sh.id,amount,note,by:sh.employee,at:nowISO()});$('expenseAmount').value='';$('expenseNote').value='';persistLocal();renderPayments();if(cloudEnabled)syncCloud();
+}
+function closeShift(){
+ const sh=activeShift();if(!sh)return;const counted=Number($('countedCash').value),countedAccount=Number($('countedAccount').value),handedTo=$('handedTo').value.trim();if($('countedCash').value===''||$('countedAccount').value===''||counted<0||countedAccount<0||!handedTo){alert('Ingresá el efectivo contado, el saldo contado en cuentas/medios electrónicos y el nombre de quien recibe la entrega.');return}
+ const totals=shiftCashTotals(sh),expectedCash=Number(sh.openingCash||0)+totals.cashIn-totals.cashOut,expectedAccount=totals.nonCash,expectedTotal=expectedCash+expectedAccount,diffCash=Math.round((counted-expectedCash)*100)/100,diffAccount=Math.round((countedAccount-expectedAccount)*100)/100,diff=Math.round((counted+countedAccount-expectedTotal)*100)/100;
+ if(!confirm('Cerrar caja de '+sh.employee+'?\nEfectivo esperado: '+money(expectedCash)+' · contado: '+money(counted)+'\nCuenta/medios esperados: '+money(expectedAccount)+' · contado: '+money(countedAccount)+'\nTOTAL esperado: '+money(expectedTotal)+' · TOTAL contado: '+money(counted+countedAccount)+'\nDiferencia total: '+money(diff)+'\nEntrega a: '+handedTo))return;
+ Object.assign(sh,{status:'closed',closedAt:nowISO(),cashIn:totals.cashIn,cashOut:totals.cashOut,otherPayments:totals.nonCash,transferIn:totals.transfer,debitIn:totals.debit,creditIn:totals.credit,expectedCash,expectedAccount,expectedTotal,countedCash:counted,countedAccount,countedTotal:counted+countedAccount,difference:diff,differenceCash:diffCash,differenceAccount:diffAccount,handedTo,closeNote:$('closeNote').value.trim()});persistLocal();$('countedCash').value='';$('countedAccount').value='';$('handedTo').value='';$('closeNote').value='';renderPayments();updateDashboard();if(cloudEnabled)syncCloud();alert('Turno cerrado. '+(diff===0?'El total de caja coincide.':'Quedó registrada una diferencia total de '+money(diff)+'.'));
+}
+function voidPayment(paymentId){
+ const p=payments.find(x=>x.id===paymentId);if(!p||p.voidedAt)return;const reason=prompt('Motivo de la corrección/anulación del pago. El movimiento quedará registrado como anulado:');if(reason===null)return;if(!reason.trim()){alert('Escribí el motivo para dejar constancia.');return}
+ if(!confirm('¿Anular este pago de '+money(p.amount)+'? El saldo del bulto y el control de caja se recalcularán.'))return;
+ p.voidedAt=nowISO();p.voidReason=reason.trim();const r=records.find(x=>x.id===p.recordId);if(r){const rp=(r.payments||[]).find(x=>x.id===p.id);if(rp){rp.voidedAt=p.voidedAt;rp.voidReason=p.voidReason}}
+ shifts.filter(x=>x.status==='closed').forEach(sh=>{const t=shiftCashTotals(sh);sh.cashIn=t.cashIn;sh.cashOut=t.cashOut;sh.otherPayments=t.other;sh.expectedCash=Number(sh.openingCash||0)+t.cashIn-t.cashOut;sh.expectedAccount=t.nonCash;sh.expectedTotal=sh.expectedCash+sh.expectedAccount;sh.countedTotal=Number(sh.countedCash||0)+Number(sh.countedAccount||0);sh.difference=Math.round((sh.countedTotal-sh.expectedTotal)*100)/100});persistLocal();renderPayments();renderRecords();updateDashboard();if(cloudEnabled)syncCloud();alert('Pago anulado con constancia del motivo.');
+}
+function renderShiftUI(){
+ const sh=activeShift(),status=$('shiftStatus'),openForm=$('openShiftForm'),activePanel=$('activeShiftPanel');if(!status)return;
+ if(!sh){status.textContent='Caja cerrada. Abrí un turno antes de registrar cobros.';status.className='notice';openForm.classList.remove('hidden');activePanel.classList.add('hidden')}
+ else{const t=shiftCashTotals(sh),expected=Number(sh.openingCash||0)+t.cashIn-t.cashOut;status.textContent='CAJA ABIERTA · '+sh.employee+' · Desde '+dateTime(sh.openedAt);status.className='notice oknotice';openForm.classList.add('hidden');activePanel.classList.remove('hidden');$('shiftTotals').innerHTML=`<div class="recordgrid"><div class="kv"><span>Efectivo inicial</span><b>${money(sh.openingCash)}</b></div><div class="kv"><span>Cobros en efectivo</span><b>${money(t.cashIn)}</b></div><div class="kv"><span>Transferencias (con recargo)</span><b>${money(t.transfer)}</b></div><div class="kv"><span>Débito</span><b>${money(t.debit)}</b></div><div class="kv"><span>Crédito</span><b>${money(t.credit)}</b></div><div class="kv"><span>Otros medios</span><b>${money(t.other)}</b></div><div class="kv"><span>Gastos/retiros de efectivo</span><b>${money(t.cashOut)}</b></div><div class="kv"><span>Efectivo esperado</span><b>${money(expected)}</b></div><div class="kv"><span>Total esperado en efectivo + cuentas</span><b>${money(expected+t.nonCash)}</b></div></div>`}
+ const hist=$('shiftHistory');if(hist)hist.innerHTML=shifts.filter(x=>x.status==='closed').length?'<div class="tablewrap"><table><thead><tr><th>Empleado</th><th>Apertura</th><th>Cierre</th><th>Inicial</th><th>Cobros efectivo</th><th>Gastos</th><th>Efectivo esperado</th><th>Cuenta esperada</th><th>Total esperado</th><th>Total contado</th><th>Diferencia total</th><th>Entregado a</th></tr></thead><tbody>'+shifts.filter(x=>x.status==='closed').map(x=>`<tr><td>${esc(x.employee)}</td><td>${esc(dateTime(x.openedAt))}</td><td>${esc(dateTime(x.closedAt))}</td><td>${money(x.openingCash)}</td><td>${money(x.cashIn)}</td><td>${money(x.cashOut)}</td><td>${money(x.expectedCash)}</td><td>${money(x.expectedAccount??x.otherPayments??0)}</td><td>${money(x.expectedTotal??x.expectedCash+(x.expectedAccount??x.otherPayments??0))}</td><td>${money(x.countedTotal??(Number(x.countedCash||0)+Number(x.countedAccount||0)))}</td><td>${money(x.difference)}</td><td>${esc(x.handedTo)}</td></tr>`).join('')+'</tbody></table></div>':'<div class="empty">Todavía no hay turnos cerrados.</div>';
+}
+
+function csvDownload(filename, rows){
+ const csv='\ufeff'+rows.map(row=>row.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(';')).join('\r\n');
+ const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=filename;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+function exportCSV(){
+ const rows=[['Código interno','N.º de ticket correlativo','Código compartido de grupo','Tipo','Pasajero','DNI','Teléfono','Descripción','Peso kg','Cantidad original','N.º de bulto en grupo','Tarifa diaria por bulto ARS','Días de estadía','Precio de embalaje ARS','Total por bulto ARS','Pagado ARS','Saldo ARS','Estado','Ingreso al depósito','Retiro previsto','Recibido por','Fecha entrega','Entregado por','Observaciones']];
+ records.forEach(r=>rows.push([r.id,r.ticket||'',r.groupCode||r.ticketCode||'',r.kind,r.passenger,r.dni,r.phone,r.description,r.weight,r.batchQuantity||1,r.batchIndex||1,(r.unitPrice??r.price),r.stayDays||1,r.packingPrice||0,r.price,calcPaid(r),balance(r),r.status==='stored'?'En depósito':'Entregado',fmtDate(r.receivedAt),fmtDate(r.pickupAt),r.receivedBy,fmtDate(r.deliveredAt),r.deliveredBy,r.notes]));
+ csvDownload('ViajesMDQ_Equipaje_'+new Date().toISOString().slice(0,10)+'.csv',rows);
+}
+function exportPayments(){const rows=[['Fecha','Código bulto','Pasajero','Importe ARS','Medio de pago','Cobrado por','Concepto','Turno','Estado','Motivo de anulación']];payments.forEach(p=>rows.push([fmtDate(p.at),p.code||p.recordId,p.passenger,p.amount,p.method,p.by,p.note,shifts.find(x=>x.id===p.shiftId)?.employee||'',p.voidedAt?'Anulado':'Válido',p.voidReason||'']));rows.push([]);rows.push(['TURNOS']);rows.push(['Empleado','Apertura','Cierre','Efectivo inicial','Cobros efectivo','Gastos/retiros','Esperado','Contado','Diferencia','Entregado a','Observaciones']);shifts.forEach(x=>rows.push([x.employee,fmtDate(x.openedAt),fmtDate(x.closedAt),x.openingCash,x.cashIn,x.cashOut,x.expectedCash,x.countedCash,x.difference,x.handedTo,x.closeNote]));csvDownload('ViajesMDQ_Caja_'+new Date().toISOString().slice(0,10)+'.csv',rows)}
+function backupJSON(){
+ const blob=new Blob([JSON.stringify({format:'ViajesMDQ-Luggage-v3',exportedAt:nowISO(),records,payments,shifts,expenses},null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='ViajesMDQ_Respaldo_'+new Date().toISOString().slice(0,10)+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+function restoreJSON(){
+ const file=$('restoreFile').files[0];if(!file){alert('Elegí un archivo JSON.');return}
+ if(!confirm('Esto reemplazará todos los registros y movimientos actuales. ¿Continuar?'))return;
+ const reader=new FileReader();reader.onload=()=>{try{const d=JSON.parse(reader.result);if(!['ViajesMDQ-Luggage-v2','ViajesMDQ-Luggage-v3'].includes(d.format)||!Array.isArray(d.records)||!Array.isArray(d.payments))throw new Error('Formato incorrecto');records=d.records;payments=d.payments;shifts=Array.isArray(d.shifts)?d.shifts:[];expenses=Array.isArray(d.expenses)?d.expenses:[];persistLocal();renderRecords();renderPayments();updateDashboard();if(cloudEnabled)syncCloud();alert('Copia restaurada.')}catch(e){alert('No se pudo restaurar: '+e.message)}};reader.readAsText(file);
+}
+function openCloud(){ $('cloudModal').classList.remove('hidden');try{const c=JSON.parse(localStorage.getItem(CFGKEY)||'{}');$('fbApiKey').value=c.apiKey||'';$('fbAuthDomain').value=c.authDomain||'';$('fbProjectId').value=c.projectId||'';$('fbAppId').value=c.appId||'';$('fbEmail').value=c.email||'';}catch{}}
+function closeCloud(){$('cloudModal').classList.add('hidden')}
+function cloudMessage(t){$('cloudError').textContent=t}
+function loadScript(src){return new Promise((resolve,reject)=>{const s=document.createElement('script');s.src=src;s.onload=resolve;s.onerror=()=>reject(new Error('No se pudo cargar Firebase. Revisá tu conexión a Internet.'));document.head.appendChild(s)})}
+async function connectCloud(){
+ const cfg={apiKey:$('fbApiKey').value.trim(),authDomain:$('fbAuthDomain').value.trim(),projectId:$('fbProjectId').value.trim(),appId:$('fbAppId').value.trim(),email:$('fbEmail').value.trim()};
+ const password=$('fbPassword').value;
+ if(!cfg.apiKey||!cfg.authDomain||!cfg.projectId||!cfg.appId||!cfg.email||!password){cloudMessage('Completá los cuatro datos del proyecto y el correo y contraseña autorizados.');return}
+ cloudMessage('Conectando…');
+ try{
+  if(!window.firebase){await loadScript('https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js');await loadScript('https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js');await loadScript('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js')}
+  firebaseApp=window.firebase.apps.length?window.firebase.app():window.firebase.initializeApp(cfg);
+  cloudAuth=firebaseApp.auth();cloudDb=firebaseApp.firestore();
+  const cred=await cloudAuth.signInWithEmailAndPassword(cfg.email,password);cloudUser=cred.user;
+  localStorage.setItem(CFGKEY,JSON.stringify(cfg));cloudEnabled=true;
+  await syncCloud(true);$('fbPassword').value='';cloudMessage('Conexión correcta. Datos sincronizados.');updateDashboard();
+ }catch(e){cloudEnabled=false;cloudMessage('No se pudo conectar: '+(e.message||e)+' Revisá Firebase Authentication, Firestore y las reglas de acceso.');updateDashboard()}
+}
+async function syncCloud(initial=false){
+ if(!cloudEnabled||!cloudDb||!cloudUser){if(!initial)alert('Primero configurá y conectá Firebase.');return}
+ try{
+  const ref=cloudDb.collection('users').doc(cloudUser.uid).collection('appdata').doc('luggage');
+  if(initial){
+   const snap=await ref.get();
+   if(snap.exists){const data=snap.data();if(confirm('Hay datos guardados en la nube. ¿Querés cargar esos datos en este dispositivo? Elegí Cancelar para conservar los datos locales y subirlos.')){records=Array.isArray(data.records)?data.records:[];payments=Array.isArray(data.payments)?data.payments:[];shifts=Array.isArray(data.shifts)?data.shifts:[];expenses=Array.isArray(data.expenses)?data.expenses:[];persistLocal();renderRecords();renderPayments();updateDashboard();return}}
+  }
+  await ref.set({records,payments,shifts,expenses,updatedAt:nowISO(),schemaVersion:3});
+  cloudMessage('Sincronización completada.');updateDashboard();
+ }catch(e){alert('No se pudo sincronizar con la nube: '+e.message);cloudMessage('Error de sincronización: '+e.message)}
+}
+function disconnectCloud(){cloudEnabled=false;cloudUser=null;cloudDb=null;cloudAuth=null;cloudMessage('Nube desconectada. Los datos locales permanecen en este dispositivo.');updateDashboard()}
+loadLocal();
+$('receivedBy').value=localStorage.getItem(EMPKEY)||'';
+updatePriceTotal();
+updateDashboard();renderRecords();renderPayments();renderPaymentSelect();
+</script>
+</body>
+</html>
