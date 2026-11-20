@@ -408,10 +408,26 @@ function renderShiftUI(){
  const hist=$('shiftHistory');if(hist)hist.innerHTML=shifts.filter(x=>x.status==='closed').length?'<div class="tablewrap"><table><thead><tr><th>Empleado</th><th>Apertura</th><th>Cierre</th><th>Inicial</th><th>Cobros efectivo</th><th>Gastos</th><th>Efectivo esperado</th><th>Cuenta esperada</th><th>Total esperado</th><th>Total contado</th><th>Diferencia total</th><th>Entregado a</th></tr></thead><tbody>'+shifts.filter(x=>x.status==='closed').map(x=>`<tr><td>${esc(x.employee)}</td><td>${esc(dateTime(x.openedAt))}</td><td>${esc(dateTime(x.closedAt))}</td><td>${money(x.openingCash)}</td><td>${money(x.cashIn)}</td><td>${money(x.cashOut)}</td><td>${money(x.expectedCash)}</td><td>${money(x.expectedAccount??x.otherPayments??0)}</td><td>${money(x.expectedTotal??x.expectedCash+(x.expectedAccount??x.otherPayments??0))}</td><td>${money(x.countedTotal??(Number(x.countedCash||0)+Number(x.countedAccount||0)))}</td><td>${money(x.difference)}</td><td>${esc(x.handedTo)}</td></tr>`).join('')+'</tbody></table></div>':'<div class="empty">Todavía no hay turnos cerrados.</div>';
 }
 
+
 function csvDownload(filename, rows){
  const csv='\ufeff'+rows.map(row=>row.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(';')).join('\r\n');
- const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=filename;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+ const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
+ const url=URL.createObjectURL(blob);
+ const a=document.createElement('a');
+
+ a.href=url;
+ a.download=filename;
+ a.style.display='none';
+
+ document.body.appendChild(a);
+ a.click();
+ a.remove();
+
+ setTimeout(()=>{
+  URL.revokeObjectURL(url);
+ },60000);
 }
+ 
 function exportCSV(){
  const rows=[['Código interno','N.º de ticket correlativo','Código compartido de grupo','Tipo','Pasajero','DNI','Teléfono','Descripción','Peso kg','Cantidad original','N.º de bulto en grupo','Tarifa diaria por bulto ARS','Días de estadía','Precio de embalaje ARS','Total por bulto ARS','Pagado ARS','Saldo ARS','Estado','Ingreso al depósito','Retiro previsto','Recibido por','Fecha entrega','Entregado por','Observaciones']];
  records.forEach(r=>rows.push([r.id,r.ticket||'',r.groupCode||r.ticketCode||'',r.kind,r.passenger,r.dni,r.phone,r.description,r.weight,r.batchQuantity||1,r.batchIndex||1,(r.unitPrice??r.price),r.stayDays||1,r.packingPrice||0,r.price,calcPaid(r),balance(r),r.status==='stored'?'En depósito':'Entregado',fmtDate(r.receivedAt),fmtDate(r.pickupAt),r.receivedBy,fmtDate(r.deliveredAt),r.deliveredBy,r.notes]));
