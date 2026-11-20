@@ -529,7 +529,117 @@ async function syncCloud(initial=false){
   cloudMessage('Sincronización completada.');updateDashboard();
  }catch(e){alert('No se pudo sincronizar con la nube: '+e.message);cloudMessage('Error de sincronización: '+e.message)}
 }
-function disconnectCloud(){cloudEnabled=false;cloudUser=null;cloudDb=null;cloudAuth=null;cloudMessage('Nube desconectada. Los datos locales permanecen en este dispositivo.');updateDashboard()}
+function disconnectCloud(){cloudEnabled=false;cloudUser=null;cloudDb=null;cloudAuth=null;cloudMessage('Nube desconectada. Los datos locales permanecen en este dispositivo.');updateDashboard()} 
+ 
+let mdqScanner = null;
+let mdqScanBusy = false;
+
+async function startMDQScanner() {
+  const output = document.getElementById('mdqScanResult');
+
+  if (!window.isSecureContext || !navigator.mediaDevices?.getUserMedia) {
+    output.textContent = 'La cámara requiere HTTPS y permiso del navegador.';
+    return;
+  }
+
+  try {
+    if (!window.Html5Qrcode) {
+      output.textContent = 'Cargando lector QR...';
+      await loadScript('https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js');
+    }
+
+    if (mdqScanner) await stopMDQScanner();
+
+    mdqScanBusy = false;
+    mdqScanner = new Html5Qrcode('mdqQRReader');
+
+    await mdqScanner.start(
+      { facingMode: 'environment' },
+      { fps: 10, qrbox: { width: 230, height: 230 } },
+      async function(decodedText) {
+        if (mdqScanBusy) return;
+        mdqScanBusy = true;
+        await stopMDQScanner();
+        findMDQTicket(decodedText);
+      }
+    );
+
+    output.textContent = 'Cámara activa. Enfocá el QR del ticket.';
+  } catch (e) {
+    output.textContent = 'Error de cámara: ' + e.message;
+    await stopMDQScanner();
+  }
+}
+
+async function stopMDQScanner() {
+  if (!mdqScanner) return;
+  const scanner = mdqScanner;
+  mdqScanner = null;
+  try {
+    if (scanner.isScanning) await scanner.stop();
+  } catch (e) {}
+  try {
+    await scanner.clear();
+  } catch (e) {}
+}
+
+function findMDQTicket(qrText) {
+  const output = document.getElementById('mdqScanResult');
+  const parts = String(qrText).trim().split('|');
+
+  if (parts.length < 3 || parts[0] !== 'MDQEQ1') {
+    output.textContent = 'QR no válido de Viajes MDQ.';
+    return;
+  }
+
+  const ticket = parts[1];
+  const groupCode = parts[2];
+
+  const record = records.find(r =>
+    String(r.ticket || r.id) === ticket &&
+    String(r.groupCode || r.ticketCode || r.id) === groupCode
+  );
+
+  if (!record) {
+    output.textContent = 'Bulto no encontrado. Revisá la sincronización.';
+    return;
+  }
+
+  const search = document.getElementById('search');
+  if (search) {
+    search.value = ticket;
+    renderRecords();
+  }
+
+  output.textContent =
+    'TICKET ENCONTRADO\n' +
+    'Pasajero: ' + (record.passenger || '') + '\n' +
+    'DNI: ' + (record.dni || '') + '\n' +
+    'Teléfono: ' + (record.phone || '') + '\n' +
+    'Bulto: ' + (record.kind || '') + '\n' +
+    'Descripción: ' + (record.description || '') + '\n' +
+    'Estado: ' + (record.status === 'stored' ? 'EN DEPÓSITO' : 'YA ENTREGADO');
+
+  if (record.status !== 'stored') {
+    output.textContent += '\nEste bulto ya figura como entregado.';
+    return;
+  }
+
+  const button = document.createElement('button');
+  button.className = 'primary';
+  button.textContent = '✓ Registrar entrega de este bulto';
+  button.style.marginTop = '12px';
+
+  button.onclick = function() {
+    if (!confirm('¿Confirmás la entrega de este bulto?')) return;
+    button.disabled = true;
+    deliverRecord(record.id);
+  };
+
+  output.appendChild(document.createElement('br'));
+  output.appendChild(button);
+}
+ 
 loadLocal();
 $('receivedBy').value=localStorage.getItem(EMPKEY)||'';
 updatePriceTotal();
