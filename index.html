@@ -72,7 +72,19 @@ button,input,select,textarea{font:inherit}button{cursor:pointer;border:0;border-
   </div>
  </section>
 
- <section id="tab-inventory" class="hidden">
+ <section id="tab-inventory" class="hidden"> 
+  
+<div class="panel" style="margin:12px 0">
+  <h3>📷 Escanear ticket QR</h3>
+  <p class="sub">Leé el código QR del comprobante para localizar el equipaje.</p>
+  <div class="actions">
+    <button class="primary" onclick="startMDQScanner()">📷 Abrir cámara</button>
+    <button class="secondary" onclick="stopMDQScanner()">Cerrar cámara</button>
+  </div>
+  <div id="mdqQRReader" style="width:100%;max-width:420px;margin:12px auto"></div>
+  <div id="mdqScanResult" class="notice" aria-live="polite">Esperando un ticket QR.</div>
+</div>
+  
   <div class="panel">
    <div class="listhead"><h2>Depósito e historial</h2><span class="tag" id="listCount">0 registros</span></div>
    <div class="searchrow">
