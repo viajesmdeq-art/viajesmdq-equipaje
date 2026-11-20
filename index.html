@@ -327,8 +327,65 @@ function groupPrintHTML(code,duplicate=true){
  const total=list.reduce((n,r)=>n+Number(r.price||0),0),paid=list.reduce((n,r)=>n+calcPaid(r),0),due=Math.max(0,total-paid);
  const receipt=`<section class="customer"><h1>VIAJES MDQ</h1><h2>RECIBO DEL PASAJERO · EQUIPAJE</h2><div class="big">CÓDIGO ${esc(code)}</div><p><b>Pasajero:</b> ${esc(first.passenger)}<br><b>DNI:</b> ${esc(first.dni||'—')}<br><b>Fecha y hora de ingreso:</b> ${esc(dateTime(first.receivedAt))}<br><b>Retiro previsto:</b> ${esc(dateTime(first.pickupAt))}</p><h3>Tickets incluidos (${list.length} bultos)</h3><table><thead><tr><th>Ticket</th><th>Bulto</th><th>Precio</th><th>Estado</th></tr></thead><tbody>${list.map(r=>`<tr><td><b>${esc(r.ticket||'—')}</b></td><td>${esc(r.kind)} ${r.batchIndex||1}/${r.batchQuantity||list.length}</td><td>${money(r.price)}</td><td>${balance(r)<=.009?'PAGÓ':calcPaid(r)>0?'PARCIAL':'NO PAGÓ'}</td></tr>`).join('')}</tbody></table><p class="totals"><b>Total:</b> ${money(total)}<br><b>Pagado:</b> ${money(paid)}<br><b>Saldo:</b> ${money(due)} · <b>${due<=.009?'PAGÓ':paid>0?'PAGO PARCIAL':'NO PAGÓ'}</b></p><p class="small">Conservá este recibo y verificá todos los números de ticket al retirar el equipaje.</p></section>`;
  return labels+receipt;
+
+function printShell(content,title){
+ return `<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>${esc(title)}</title>
+<style>
+@page{size:80mm auto;margin:3mm}
+*{box-sizing:border-box}
+body{font:12px Arial,sans-serif;color:#111;margin:0}
+.label{min-height:64mm;page-break-after:always;overflow:hidden;padding:2mm 0}
+.brand{font-size:15px;font-weight:bold;color:#0B2559;border-bottom:2px solid #00B2FE;padding-bottom:4px}
+.code{font-size:20px;font-weight:900;letter-spacing:1px;margin:7px 0}
+.kind{font-size:13px;font-weight:bold}
+.line{margin:3px 0;overflow-wrap:anywhere}
+.small{font-size:10px;color:#444;margin-top:4px}
+.batch{float:right;font-size:11px}
+.qrbox{text-align:center;margin:8px 0}
+.qr{display:inline-block;width:100px;height:100px}
+.qr img{width:100px;height:100px}
+.qrbox small{display:block;font-size:9px;margin-top:3px}
+.foot{margin-top:8px;padding-top:4px;border-top:1px dashed #999;font-size:9px;font-weight:bold}
+.customer{page-break-before:always;padding:2mm 0}
+.customer h1{color:#0B2559;margin:0;border-bottom:2px solid #00B2FE;padding-bottom:5px}
+.customer h2{font-size:16px}
+.big{font-size:17px;font-weight:bold;margin:8px 0}
+.customer table{border-collapse:collapse;width:100%;font-size:10px}
+.customer th,.customer td{border:1px solid #aaa;padding:4px;text-align:left}
+.totals{border-top:1px solid #aaa;padding-top:8px}
+.customer .small{font-size:10px}
+@media print{.label{break-after:page}.customer{break-before:page}}
+</style>
+</head>
+<body>
+${content}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"><\/script>
+<script>
+window.onload=()=>{
+ document.querySelectorAll('.qr[data-qr]').forEach(el=>{
+  if(typeof QRCode==='undefined'){
+   el.textContent='QR NO DISPONIBLE';
+   return;
+  }
+  new QRCode(el,{
+   text:el.getAttribute('data-qr'),
+   width:100,
+   height:100,
+   correctLevel:QRCode.CorrectLevel.M
+  });
+ });
+ setTimeout(()=>window.print(),1200);
+};
+<\/script>
+</body>
+</html>`;
 }
-function printShell(content,title){return `<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(title)}</title><style>@page{size:80mm auto;margin:3mm}*{box-sizing:border-box}body{font:12px Arial,sans-serif;color:#111;margin:0}.label{min-height:64mm;page-break-after:always;overflow:hidden;padding:2mm 0}.brand{font-size:15px;font-weight:bold;color:#0B2559;border-bottom:2px solid #00B2FE;padding-bottom:4px}.code{font-size:20px;font-weight:900;letter-spacing:1px;margin:7px 0}.kind{font-size:13px;font-weight:bold}.line{margin:3px 0;overflow-wrap:anywhere}.small{font-size:10px;color:#444;margin-top:4px}.batch{float:right;font-size:11px}.foot{margin-top:8px;padding-top:4px;border-top:1px dashed #999;font-size:9px;font-weight:bold}.customer{page-break-before:always;padding:2mm 0}.customer h1{color:#0B2559;margin:0;border-bottom:2px solid #00B2FE;padding-bottom:5px}.customer h2{font-size:16px}.big{font-size:17px;font-weight:bold;margin:8px 0}.customer table{border-collapse:collapse;width:100%;font-size:10px}.customer th,.customer td{border:1px solid #aaa;padding:4px;text-align:left}.totals{border-top:1px solid #aaa;padding-top:8px}.customer .small{font-size:10px}</style></head><body>${content}<script>window.onload=()=>window.print()<\/script></body></html>`}
+ 
 function printGroupPack(code){const w=window.open('','_blank');if(!w){alert('Permití ventanas emergentes para imprimir.');return}w.document.write(printShell(groupPrintHTML(code,true),'Tickets duplicados y recibo Viajes MDQ'));w.document.close()}
 function printGroupReceipt(code){const html=groupPrintHTML(code,false);const receiptStart=html.indexOf('<section class="customer">');const w=window.open('','_blank');if(!w){alert('Permití ventanas emergentes para imprimir.');return}w.document.write(printShell(receiptStart>=0?html.slice(receiptStart):html,'Recibo del pasajero Viajes MDQ'));w.document.close()}
 function receipt(recordId){
