@@ -307,7 +307,42 @@ function deliverGroup(code,selectedOnly=false){
  let msg='Confirmar entrega de '+targets.length+' bulto(s) a '+group[0].passenger+'?\nTickets: '+tickets+'\nCódigo de grupo: '+code+'\nResponsable: '+by.trim();if(due>0.009)msg+='\n\nATENCIÓN: los bultos seleccionados tienen una deuda de '+money(due)+'. La entrega quedará registrada igualmente si confirmás.';
  if(!confirm(msg))return;const at=nowISO();targets.forEach(r=>{r.status='delivered';r.deliveredAt=at;r.deliveredBy=by.trim()});localStorage.setItem(EMPKEY,by.trim());persistLocal();renderRecords();if(cloudEnabled)syncCloud();alert('Entrega registrada: '+targets.length+' bulto(s).'+(group.some(r=>r.status==='stored')?' Los demás siguen en depósito.':''));
 }
-function deliverRecord(recordId){const r=records.find(x=>x.id===recordId);if(!r||r.status!=='stored')return;const by=prompt('Nombre de quien entrega el bulto:', $('receivedBy').value||localStorage.getItem(EMPKEY)||'');if(by===null)return;if(!by.trim()){alert('Ingresá el nombre del responsable de la entrega.');return}let msg='Confirmar entrega individual del ticket '+(r.ticket||r.id)+' a '+r.passenger+'?';if(balance(r)>0.009)msg+='\n\nATENCIÓN: queda una deuda de '+money(balance(r))+'. La entrega se registrará si confirmás.';if(!confirm(msg))return;r.status='delivered';r.deliveredAt=nowISO();r.deliveredBy=by.trim();localStorage.setItem(EMPKEY,by.trim());persistLocal();renderRecords();if(cloudEnabled)syncCloud();alert('Entrega individual registrada.');}
+ function deliverRecord(recordId){
+  const r=records.find(x=>x.id===recordId);
+  if(!r||r.status!=='stored')return;
+
+  const by=prompt(
+    'Nombre de quien entrega el bulto:',
+    $('receivedBy').value||localStorage.getItem(EMPKEY)||''
+  );
+
+  if(by===null)return;
+
+  if(!by.trim()){
+    alert('Ingresá el nombre del responsable de la entrega.');
+    return;
+  }
+
+  let msg='Confirmar entrega individual del ticket '+(r.ticket||r.id)+' a '+r.passenger+'?';
+
+  if(balance(r)>0.009){
+    msg+='\n\nATENCIÓN: queda una deuda de '+money(balance(r))+'. La entrega se registrará si confirmás.';
+  }
+
+  if(!confirm(msg))return;
+
+  r.status='delivered';
+  r.deliveredAt=nowISO();
+  r.deliveredBy=by.trim();
+
+  localStorage.setItem(EMPKEY,by.trim());
+  persistLocal();
+  renderRecords();
+
+  if(cloudEnabled)syncCloud();
+
+  alert('Entrega individual registrada.');
+ }
 function editRecord(recordId){
  const r=records.find(x=>x.id===recordId);if(!r)return;
  $('editId').value=r.id;$('kind').value=r.kind;$('passenger').value=r.passenger;$('dni').value=r.dni||'';$('receivedBy').value=r.receivedBy||'';$('unitPrice').value=(r.unitPrice??r.price);$('stayDays').value=String(r.stayDays||1);$('packingPrice').value=r.packingPrice||0;$('pickupAt').value=r.pickupAt?new Date(r.pickupAt).toLocaleString('sv-SE').replace(' ','T').slice(0,16):'';$('price').value=r.price;$('qty').value='1';updatePriceTotal();$('initialPayment').value='';$('payment2Amount').value='';$('payment3Amount').value='';$('weight').value=r.weight||'';$('description').value=r.description||'';$('phone').value=r.phone||'';$('notes').value=r.notes||'';
