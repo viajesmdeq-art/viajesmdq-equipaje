@@ -427,14 +427,73 @@ function printBatchLabels(){
  const w=window.open('','_blank');if(!w){alert('Permití ventanas emergentes para imprimir.');return}
  const docs=groups.map(code=>groupPrintHTML(code,true)).join('');w.document.write(printShell(docs,'Impresión de grupos Viajes MDQ'));w.document.close();
 }
+
 function groupPrintHTML(code,duplicate=true){
- const list=records.filter(r=>(r.groupCode||r.ticketCode||r.id)===code).sort((a,b)=>(a.batchIndex||1)-(b.batchIndex||1));if(!list.length)return '';
+ const list=records.filter(r=>(r.groupCode||r.ticketCode||r.id)===code)
+  .sort((a,b)=>(a.batchIndex||1)-(b.batchIndex||1));
+ if(!list.length)return '';
+
  const first=list[0];
- const labels=list.map(r=>{const label=`<section class="label"><div class="brand">VIAJES MDQ <span class="batch">Bulto ${r.batchIndex||1}/${r.batchQuantity||list.length}</span></div><div class="code">TICKET N.º ${esc(r.ticket||'—')}</div><div class="kind">${esc(r.kind)} · ${esc(r.passenger)}</div><div class="line">DNI: <b>${esc(r.dni||'—')}</b></div><div class="line">Código de grupo: <b>${esc(r.groupCode||r.ticketCode||r.id)}</b></div><div class="line">Precio bulto: ${money(r.unitPrice??r.price)}</div><div class="line">Estado de pago: <b>${balance(r)<=.009?'PAGÓ':calcPaid(r)>0?'PAGO PARCIAL':'NO PAGÓ'}</b></div>${Number(r.packingPrice||0)>0?`<div class="line">Embalaje asignado: ${money(r.packingPrice)}</div>`:''}<div class="small">Ingreso: ${esc(dateTime(r.receivedAt))}</div><div class="small">Retiro previsto: ${esc(dateTime(r.pickupAt))}</div><div class="small">Recibió: ${esc(r.receivedBy||'—')}</div><div class="foot">COPIA PARA CONTROL DEL EQUIPAJE</div></section>`;return duplicate?label+label.replace('COPIA PARA CONTROL DEL EQUIPAJE','COPIA PARA EL PASAJERO'):label}).join('');
- const total=list.reduce((n,r)=>n+Number(r.price||0),0),paid=list.reduce((n,r)=>n+calcPaid(r),0),due=Math.max(0,total-paid);
- const receipt=`<section class="customer"><h1>VIAJES MDQ</h1><h2>RECIBO DEL PASAJERO · EQUIPAJE</h2><div class="big">CÓDIGO ${esc(code)}</div><p><b>Pasajero:</b> ${esc(first.passenger)}<br><b>DNI:</b> ${esc(first.dni||'—')}<br><b>Fecha y hora de ingreso:</b> ${esc(dateTime(first.receivedAt))}<br><b>Retiro previsto:</b> ${esc(dateTime(first.pickupAt))}</p><h3>Tickets incluidos (${list.length} bultos)</h3><table><thead><tr><th>Ticket</th><th>Bulto</th><th>Precio</th><th>Estado</th></tr></thead><tbody>${list.map(r=>`<tr><td><b>${esc(r.ticket||'—')}</b></td><td>${esc(r.kind)} ${r.batchIndex||1}/${r.batchQuantity||list.length}</td><td>${money(r.price)}</td><td>${balance(r)<=.009?'PAGÓ':calcPaid(r)>0?'PARCIAL':'NO PAGÓ'}</td></tr>`).join('')}</tbody></table><p class="totals"><b>Total:</b> ${money(total)}<br><b>Pagado:</b> ${money(paid)}<br><b>Saldo:</b> ${money(due)} · <b>${due<=.009?'PAGÓ':paid>0?'PAGO PARCIAL':'NO PAGÓ'}</b></p><p class="small">Conservá este recibo y verificá todos los números de ticket al retirar el equipaje.</p></section>`;
-return labels+receipt;
+
+ const labels=list.map(r=>{
+  const ticket=String(r.ticket||r.id);
+  const group=String(r.groupCode||r.ticketCode||r.id);
+  const qr='MDQEQ1|'+ticket+'|'+group;
+
+  const label=`<section class="label">
+   <div class="brand">VIAJES MDQ
+    <span class="batch">Bulto ${r.batchIndex||1}/${r.batchQuantity||list.length}</span>
+   </div>
+   <div class="code">TICKET N.º ${esc(ticket)}</div>
+   <div class="kind">${esc(r.kind)} · ${esc(r.passenger)}</div>
+   <div class="line">DNI: <b>${esc(r.dni||'—')}</b></div>
+   <div class="line">Código de grupo: <b>${esc(group)}</b></div>
+   <div class="qr" data-qr="${esc(qr)}"></div>
+   <div class="line">Precio bulto: ${money(r.unitPrice??r.price)}</div>
+   <div class="line">Estado de pago: <b>${balance(r)<=.009?'PAGÓ':calcPaid(r)>0?'PAGO PARCIAL':'NO PAGÓ'}</b></div>
+   ${Number(r.packingPrice||0)>0?`<div class="line">Embalaje asignado: ${money(r.packingPrice)}</div>`:''}
+   <div class="small">Ingreso: ${esc(dateTime(r.receivedAt))}</div>
+   <div class="small">Retiro previsto: ${esc(dateTime(r.pickupAt))}</div>
+   <div class="small">Recibió: ${esc(r.receivedBy||'—')}</div>
+   <div class="foot">COPIA PARA CONTROL DEL EQUIPAJE</div>
+  </section>`;
+
+  return duplicate
+   ?label+label.replace('COPIA PARA CONTROL DEL EQUIPAJE','COPIA PARA EL PASAJERO')
+   :label;
+ }).join('');
+
+ const total=list.reduce((n,r)=>n+Number(r.price||0),0);
+ const paid=list.reduce((n,r)=>n+calcPaid(r),0);
+ const due=Math.max(0,total-paid);
+
+ const receipt=`<section class="customer">
+  <h1>VIAJES MDQ</h1>
+  <h2>RECIBO DEL PASAJERO · EQUIPAJE</h2>
+  <div class="big">CÓDIGO ${esc(code)}</div>
+  <p><b>Pasajero:</b> ${esc(first.passenger)}<br>
+  <b>DNI:</b> ${esc(first.dni||'—')}<br>
+  <b>Fecha y hora de ingreso:</b> ${esc(dateTime(first.receivedAt))}<br>
+  <b>Retiro previsto:</b> ${esc(dateTime(first.pickupAt))}</p>
+  <h3>Tickets incluidos (${list.length} bultos)</h3>
+  <table>
+   <thead><tr><th>Ticket</th><th>Bulto</th><th>Precio</th><th>Estado</th></tr></thead>
+   <tbody>${list.map(r=>`<tr>
+    <td><b>${esc(r.ticket||'—')}</b></td>
+    <td>${esc(r.kind)} ${r.batchIndex||1}/${r.batchQuantity||list.length}</td>
+    <td>${money(r.price)}</td>
+    <td>${balance(r)<=.009?'PAGÓ':calcPaid(r)>0?'PARCIAL':'NO PAGÓ'}</td>
+   </tr>`).join('')}</tbody>
+  </table>
+  <p class="totals"><b>Total:</b> ${money(total)}<br>
+  <b>Pagado:</b> ${money(paid)}<br>
+  <b>Saldo:</b> ${money(due)} · <b>${due<=.009?'PAGÓ':paid>0?'PAGO PARCIAL':'NO PAGÓ'}</b></p>
+  <p class="small">Conservá este recibo y verificá todos los números de ticket al retirar el equipaje.</p>
+ </section>`;
+
+ return labels+receipt;
 }
+ 
 
 function printShell(content,title){ 
  return `<!doctype html>
