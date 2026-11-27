@@ -353,12 +353,71 @@ function deleteRecord(recordId){
  if(!confirm('¿Eliminar el registro '+r.id+'? Esta acción no se puede deshacer. Se recomienda no borrar registros con pagos; usá una copia de seguridad.'))return;
  records=records.filter(x=>x.id!==recordId);payments=payments.filter(p=>p.recordId!==recordId);persistLocal();renderRecords();renderPayments();renderPaymentSelect();updateDashboard();if(cloudEnabled)syncCloud();
 }
+
 function printLabel(recordId){
- const r=records.find(x=>x.id===recordId);if(!r)return;
- const w=window.open('','_blank');if(!w){alert('El navegador bloqueó la impresión. Permití ventanas emergentes e intentá otra vez.');return}
- w.document.write(`<!doctype html><html lang="es"><head><meta charset="utf-8"><title>Etiqueta ${esc(r.id)}</title><style>@page{size:80mm 70mm;margin:3mm}body{font:12px Arial,sans-serif;color:#111;margin:0;padding:3mm}.brand{font-size:15px;font-weight:bold;color:#0B2559;border-bottom:2px solid #00B2FE;padding-bottom:4px}.code{font-size:20px;font-weight:900;letter-spacing:1px;margin:7px 0}.kind{font-size:13px;font-weight:bold}.line{margin:3px 0;overflow-wrap:anywhere}.small{font-size:10px;color:#444}.batch{float:right;font-size:11px}</style></head><body><div class="brand">VIAJES MDQ <span class="batch">${r.batchIndex&&r.batchQuantity>1?'Bulto '+r.batchIndex+'/'+r.batchQuantity:''}</span></div><div class="code">TICKET N.º ${esc(r.ticket||'—')}</div><div class="kind">${esc(r.kind)} · ${esc(r.passenger)}</div><div class="line">Código grupo: <b>${esc(r.groupCode||r.ticketCode||r.id)}</b></div><div class="line">Tarifa diaria: ${money(r.unitPrice??r.price)} × ${r.stayDays||1} día(s) · Embalaje: ${money(r.packingPrice||0)}</div><div class="line">Total: <b>${money(r.price)}</b></div><div class="small">Ingresó al depósito: ${esc(dateTime(r.receivedAt))}</div><div class="small">Retiro previsto: ${esc(dateTime(r.pickupAt))}</div><script>window.onload=()=>window.print()<\/script></body></html>`);w.document.close();
- <div class="qr" data-qr="${esc('MDQEQ1|'+(r.ticket||r.id)+'|'+(r.groupCode||r.ticketCode||r.id))}"></div>
+ const r=records.find(x=>x.id===recordId);
+ if(!r)return;
+
+ const w=window.open('','_blank');
+ if(!w){
+  alert('El navegador bloqueó la impresión. Permití ventanas emergentes e intentá otra vez.');
+  return;
+ }
+
+ const ticket=String(r.ticket||r.id);
+ const group=String(r.groupCode||r.ticketCode||r.id);
+ const qr='MDQEQ1|'+ticket+'|'+group;
+
+ w.document.write(`<!doctype html>
+ <html lang="es">
+ <head>
+ <meta charset="utf-8">
+ <title>Etiqueta ${esc(r.id)}</title>
+ <style>
+ @page{size:80mm 70mm;margin:3mm}
+ body{font:12px Arial,sans-serif;color:#111;margin:0;padding:3mm}
+ .brand{font-size:15px;font-weight:bold;color:#0B2559;border-bottom:2px solid #00B2FE;padding-bottom:4px}
+ .code{font-size:20px;font-weight:900;letter-spacing:1px;margin:7px 0}
+ .kind{font-size:13px;font-weight:bold}
+ .line{margin:3px 0;overflow-wrap:anywhere}
+ .small{font-size:10px;color:#444}
+ .batch{float:right;font-size:11px}
+ .qr{margin:8px auto;text-align:center}
+ </style>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"><\/script>
+ </head>
+ <body>
+ <div class="brand">VIAJES MDQ</div>
+ <div class="code">TICKET N.º ${esc(ticket)}</div>
+ <div class="kind">${esc(r.kind)} · ${esc(r.passenger)}</div>
+ <div class="line">Código grupo: <b>${esc(group)}</b></div>
+ <div class="qr" id="ticketQR" data-qr="${esc(qr)}"></div>
+ <div class="line">Tarifa diaria: ${money(r.unitPrice??r.price)} × ${r.stayDays||1} día(s) · Embalaje: ${money(r.packingPrice||0)}</div>
+ <div class="line">Total: <b>${money(r.price)}</b></div>
+ <div class="small">Ingresó al depósito: ${esc(dateTime(r.receivedAt))}</div>
+ <div class="small">Retiro previsto: ${esc(dateTime(r.pickupAt))}</div>
+
+ <script>
+ window.onload=()=>{
+  const el=document.getElementById('ticketQR');
+  if(typeof QRCode==='undefined'){
+   el.textContent='QR NO DISPONIBLE';
+  }else{
+   new QRCode(el,{
+    text:el.getAttribute('data-qr'),
+    width:100,
+    height:100,
+    correctLevel:QRCode.CorrectLevel.M
+   });
+  }
+  setTimeout(()=>window.print(),1200);
+ };
+ <\/script>
+ </body>
+ </html>`);
+ w.document.close();
 }
+ 
 function printBatchLabels(){
  const q=($('search')?.value||'').trim().toLowerCase(),st=$('statusFilter')?.value||'all',kind=$('kindFilter')?.value||'all';
  const list=records.filter(r=>{const hay=[r.id,r.passenger,r.dni,r.ticket,r.ticketCode,r.groupCode].join(' ').toLowerCase();return(!q||hay.includes(q))&&(st==='all'||r.status===st)&&(kind==='all'||r.kind===kind)});
