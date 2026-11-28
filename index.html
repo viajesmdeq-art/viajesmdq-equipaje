@@ -700,7 +700,7 @@ function disconnectCloud(){cloudEnabled=false;cloudUser=null;cloudDb=null;cloudA
  
 let mdqScanner = null;
 let mdqScanBusy = false;
-
+ let mdqFirstScan = null;
 async function startMDQScanner() {
   const output = document.getElementById('mdqScanResult');
 
