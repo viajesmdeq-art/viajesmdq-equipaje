@@ -756,11 +756,12 @@ async function stopMDQScanner() {
   } catch (e) {}
 }
 
-function findMDQTicket(qrText) {
+
+function findMDQTicket(qrText, stage = 'passenger') {
   const output = document.getElementById('mdqScanResult');
   const parts = String(qrText).trim().split('|');
 
-  if (parts.length < 3 || parts[0] !== 'MDQEQ1') {
+  if (parts.length !== 3 || parts[0] !== 'MDQEQ1') {
     output.textContent = 'QR no válido de Viajes MDQ.';
     return;
   }
@@ -778,40 +779,106 @@ function findMDQTicket(qrText) {
     return;
   }
 
-  const search = document.getElementById('search');
-  if (search) {
-    search.value = ticket;
-    renderRecords();
-  }
+  if (stage === 'passenger') {
+    if (record.status !== 'stored') {
+      output.textContent = 'Este bulto ya figura como entregado.';
+      return;
+    }
 
-  output.textContent =
-    'TICKET ENCONTRADO\n' +
-    'Pasajero: ' + (record.passenger || '') + '\n' +
-    'DNI: ' + (record.dni || '') + '\n' +
-    'Teléfono: ' + (record.phone || '') + '\n' +
-    'Bulto: ' + (record.kind || '') + '\n' +
-    'Descripción: ' + (record.description || '') + '\n' +
-    'Estado: ' + (record.status === 'stored' ? 'EN DEPÓSITO' : 'YA ENTREGADO');
+    mdqFirstScan = {
+      ticket,
+      groupCode,
+      recordId: record.id
+    };
 
-  if (record.status !== 'stored') {
-    output.textContent += '\nEste bulto ya figura como entregado.';
+    output.textContent =
+      '✓ COMPROBANTE DEL PASAJERO LEÍDO\n' +
+      'Ticket: ' + ticket + '\n' +
+      'Grupo: ' + groupCode + '\n' +
+      'Pasajero: ' + (record.passenger || '') + '\n\n' +
+      'Ahora escaneá la etiqueta de la valija.';
+
+    const button = document.createElement('button');
+    button.className = 'primary';
+    button.textContent = '📷 Escanear etiqueta de la valija';
+    button.style.marginTop = '12px';
+    button.onclick = () => startMDQScanner('bag');
+
+    output.appendChild(document.createElement('br'));
+    output.appendChild(button);
     return;
   }
 
+  if (!mdqFirstScan) {
+    output.textContent = 'Primero escaneá el comprobante del pasajero.';
+    return;
+  }
+
+  if (
+    ticket !== mdqFirstScan.ticket ||
+    groupCode !== mdqFirstScan.groupCode
+  ) {
+    output.textContent =
+      '⛔ ENTREGA BLOQUEADA\n' +
+      'El QR de la valija no coincide con el comprobante.\n' +
+      'El primer escaneo sigue guardado.';
+
+    const retry = document.createElement('button');
+    retry.className = 'primary';
+    retry.textContent = 'Volver a escanear la valija';
+    retry.onclick = () => startMDQScanner('bag');
+
+    output.appendChild(document.createElement('br'));
+    output.appendChild(retry);
+    return;
+  }
+
+  const currentRecord = records.find(r =>
+    String(r.id) === String(mdqFirstScan.recordId)
+  );
+
+  if (!currentRecord || currentRecord.status !== 'stored') {
+    output.textContent = '⛔ Entrega bloqueada. El bulto ya no está en depósito.';
+    mdqFirstScan = null;
+    return;
+  }
+
+  output.textContent =
+    '✓ LOS DOS QR COINCIDEN\n' +
+    'Ticket: ' + ticket + '\n' +
+    'Grupo: ' + groupCode + '\n' +
+    'Pasajero: ' + (currentRecord.passenger || '') + '\n' +
+    'Bulto: ' + (currentRecord.kind || '') + '\n' +
+    'Estado: EN DEPÓSITO\n\n' +
+    'Identificación verificada.';
+
   const button = document.createElement('button');
   button.className = 'primary';
-  button.textContent = '✓ Registrar entrega de este bulto';
+  button.textContent = '✓ CONFIRMAR ENTREGA';
   button.style.marginTop = '12px';
 
   button.onclick = function() {
+    const latest = records.find(r =>
+      String(r.id) === String(mdqFirstScan?.recordId)
+    );
+
+    if (!latest || latest.status !== 'stored') {
+      output.textContent = 'Entrega bloqueada: el bulto ya no está en depósito.';
+      mdqFirstScan = null;
+      return;
+    }
+
     if (!confirm('¿Confirmás la entrega de este bulto?')) return;
+
     button.disabled = true;
-    deliverRecord(record.id);
+    mdqFirstScan = null;
+    deliverRecord(latest.id);
   };
 
   output.appendChild(document.createElement('br'));
   output.appendChild(button);
 }
+ 
  
 loadLocal();
 $('receivedBy').value=localStorage.getItem(EMPKEY)||'';
