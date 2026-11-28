@@ -701,7 +701,8 @@ function disconnectCloud(){cloudEnabled=false;cloudUser=null;cloudDb=null;cloudA
 let mdqScanner = null;
 let mdqScanBusy = false;
  let mdqFirstScan = null;
-async function startMDQScanner() {
+
+async function startMDQScanner(stage = 'passenger') {
   const output = document.getElementById('mdqScanResult');
 
   if (!window.isSecureContext || !navigator.mediaDevices?.getUserMedia) {
@@ -720,6 +721,10 @@ async function startMDQScanner() {
     mdqScanBusy = false;
     mdqScanner = new Html5Qrcode('mdqQRReader');
 
+    output.textContent = stage === 'passenger'
+      ? 'Enfocá el QR de la copia del pasajero.'
+      : 'Enfocá el QR de la etiqueta de la valija.';
+
     await mdqScanner.start(
       { facingMode: 'environment' },
       { fps: 10, qrbox: { width: 230, height: 230 } },
@@ -727,16 +732,17 @@ async function startMDQScanner() {
         if (mdqScanBusy) return;
         mdqScanBusy = true;
         await stopMDQScanner();
-        findMDQTicket(decodedText);
+        findMDQTicket(decodedText, stage);
       }
     );
 
-    output.textContent = 'Cámara activa. Enfocá el QR del ticket.';
   } catch (e) {
     output.textContent = 'Error de cámara: ' + e.message;
     await stopMDQScanner();
   }
 }
+ 
+
 
 async function stopMDQScanner() {
   if (!mdqScanner) return;
